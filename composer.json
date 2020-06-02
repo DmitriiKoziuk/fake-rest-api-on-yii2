@@ -36,6 +36,12 @@
             "enabled": false
         }
     },
+    "autoload": {
+        "psr-4": {
+            "DmitriiKoziuk\\FakeRestApiModules\\Blog\\": "modules/blog/src",
+            "DmitriiKoziuk\\FakeRestApiModules\\Blog\\tests\\": "modules/blog/tests"
+        }
+    },
     "repositories": [
         {
             "type": "composer",
