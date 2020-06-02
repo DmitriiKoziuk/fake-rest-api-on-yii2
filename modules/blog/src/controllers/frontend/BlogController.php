@@ -2,10 +2,12 @@
 
 namespace DmitriiKoziuk\FakeRestApiModules\Blog\controllers\frontend;
 
-class BlogController extends \yii\web\Controller
+use yii\rest\Controller;
+
+class BlogController extends Controller
 {
-    public function actionHello()
+    public function actionIndex()
     {
-        return $this->renderContent('Hello, Frontend');
+        return [1, 2];
     }
 }
