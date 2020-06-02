@@ -22,6 +22,9 @@ class BlogModule extends \yii\base\Module
         if ($app instanceof WebApp && $app->id = 'app-frontend') {
             $this->controllerNamespace = __NAMESPACE__ . '\controllers\frontend';
         }
+        if ($app instanceof WebApp && $app->id = 'app-backend') {
+            $this->controllerNamespace = __NAMESPACE__ . '\controllers\backend';
+        }
         if ($app instanceof ConsoleApp) {
             if (!array_key_exists('migrate', $app->controllerMap)) {
                 $app->controllerMap['migrate'] = [
