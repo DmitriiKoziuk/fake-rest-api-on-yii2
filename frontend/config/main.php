@@ -45,7 +45,7 @@ return [
             'rules' => [
                 [
                     'class' => 'yii\rest\UrlRule',
-                    'controller' => 'blog/blog'
+                    'controller' => 'blog/post'
                 ],
             ],
         ],
