@@ -19,10 +19,10 @@ class BlogModule extends \yii\base\Module
 
     private function registerControllers(BaseApp $app)
     {
-        if ($app instanceof WebApp && $app->id = 'app-frontend') {
+        if ($app instanceof WebApp && 'app-frontend' == $app->id) {
             $this->controllerNamespace = __NAMESPACE__ . '\controllers\frontend';
         }
-        if ($app instanceof WebApp && $app->id = 'app-backend') {
+        if ($app instanceof WebApp && 'app-backend' == $app->id) {
             $this->controllerNamespace = __NAMESPACE__ . '\controllers\backend';
         }
         if ($app instanceof ConsoleApp) {
