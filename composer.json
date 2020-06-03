@@ -41,7 +41,9 @@
     "autoload": {
         "psr-4": {
             "DmitriiKoziuk\\FakeRestApiModules\\Blog\\": "modules/blog/src",
-            "DmitriiKoziuk\\FakeRestApiModules\\Blog\\tests\\": "modules/blog/tests"
+            "DmitriiKoziuk\\FakeRestApiModules\\Blog\\tests\\": "modules/blog/tests",
+            "DmitriiKoziuk\\FakeRestApiModules\\Auth\\": "modules/auth/src",
+            "DmitriiKoziuk\\FakeRestApiModules\\Auth\\tests\\": "modules/auth/tests"
         }
     },
     "repositories": [
