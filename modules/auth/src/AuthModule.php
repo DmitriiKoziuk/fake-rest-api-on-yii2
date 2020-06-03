@@ -6,6 +6,7 @@ use Yii;
 use yii\base\Module;
 use yii\base\Application AS BaseApp;
 use yii\console\Application AS ConsoleApp;
+use yii\web\Application AS WebApp;
 
 class AuthModule extends Module
 {
@@ -15,6 +16,7 @@ class AuthModule extends Module
         /** @var BaseApp $app */
         $app = $this->module;
         $this->registerComponents($app);
+        $this->addControllersToApp($app);
     }
 
     private function registerComponents(BaseApp $app)
@@ -27,6 +29,13 @@ class AuthModule extends Module
                 ];
             }
             $app->controllerMap['migrate']['migrationNamespaces'][] = __NAMESPACE__ . '\migrations';
+        }
+    }
+
+    private function addControllersToApp(BaseApp $app): void
+    {
+        if ($app instanceof WebApp && 'app-backend' == $app->id) {
+            $this->controllerNamespace = __NAMESPACE__ . '\controllers\backend';
         }
     }
 }

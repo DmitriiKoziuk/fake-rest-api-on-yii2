@@ -48,6 +48,10 @@ return [
                     'class' => 'yii\rest\UrlRule',
                     'controller' => 'blog/post'
                 ],
+                [
+                    'class' => 'yii\rest\UrlRule',
+                    'controller' => 'auth/sign-in'
+                ],
             ],
         ],
     ],
