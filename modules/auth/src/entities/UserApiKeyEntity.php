@@ -3,7 +3,6 @@
 namespace DmitriiKoziuk\FakeRestApiModules\Auth\entities;
 
 use yii\db\ActiveQuery;
-use common\models\User;
 
 /**
  * This is the model class for table "{{%auth_user_api_keys}}".
