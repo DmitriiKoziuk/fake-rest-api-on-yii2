@@ -10,4 +10,12 @@ return [
             'class' => 'yii\caching\FileCache',
         ],
     ],
+    'modules' => [
+        'blog' => [
+            'class' => \DmitriiKoziuk\FakeRestApiModules\Blog\BlogModule::class,
+        ],
+    ],
+    'bootstrap' => [
+        'blog',
+    ],
 ];
