@@ -50,6 +50,7 @@ return [
                 ],
                 [
                     'class' => 'yii\rest\UrlRule',
+                    'pluralize'  => false,
                     'controller' => 'auth/sign-in'
                 ],
             ],
