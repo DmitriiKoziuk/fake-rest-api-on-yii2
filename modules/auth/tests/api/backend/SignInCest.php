@@ -3,10 +3,11 @@
 namespace DmitriiKoziuk\FakeRestApiModules\Auth\tests\api\backend;
 
 use yii\helpers\Url;
-use Codeception\Lib\Console\Output;
 use DmitriiKoziuk\FakeRestApiModules\Auth\tests\ApiTester;
 use DmitriiKoziuk\FakeRestApiModules\Auth\tests\_fixtures\UserEntityFixture;
 use DmitriiKoziuk\FakeRestApiModules\Auth\tests\_fixtures\UserApiKeyEntityFixture;
+use DmitriiKoziuk\FakeRestApiModules\Auth\entities\User;
+use DmitriiKoziuk\FakeRestApiModules\Auth\entities\UserApiKeyEntity;
 
 class SignInCest
 {
@@ -22,6 +23,7 @@ class SignInCest
     {
         $I->sendGet(Url::to('/auth/sign-in'));
         $I->seeResponseCodeIs(200);
+        $I->seeResponseContains('Hello');
     }
 
     /**
@@ -30,19 +32,47 @@ class SignInCest
      */
     public function tryToSignInWithValidData(ApiTester $I)
     {
-        [$username, $password, $apiKey] = $this->getValidUserData();
-        $output = new Output([]);
-        $output->writeln("\nPost username '{$username}' and password '{$password}'");
+        /** @var User $user */
+        $user = $I->grabFixture('users', 0);
         $I->sendPOST(Url::to('/auth/sign-in'), [
-            'username' => $username,
-            'password' => $password,
+            'username' => $user->username,
+            'password' => 'password_0',
         ]);
         $I->seeResponseCodeIs(200);
-        $I->seeResponseContainsJson(['apiKey' => $apiKey]);
+        /** @var UserApiKeyEntity $userApiKeyEntity */
+        $userApiKeyEntity = $I->grabRecord(UserApiKeyEntity::class, ['user_id' => $user->id]);
+        $I->seeResponseContainsJson([
+            'success' => true,
+            'statusMessage' => 'Ok',
+            'data' => [
+                'apiKey' => $userApiKeyEntity->api_key
+            ],
+        ]);
     }
 
-    private function getValidUserData()
+    public function tryToSignInWithNonExistUser(ApiTester $I)
     {
-        return ['bayer.hudson', 'password_0', 'tS6v0GwInVgc28QHpIiOgG4pwKaE3ikJ'];
+        $I->sendPOST(Url::to('/auth/sign-in'), [
+            'username' => 'nonExistUsername',
+            'password' => 'nonExistPassword',
+        ]);
+        $I->seeResponseContainsJson([
+            'success' => false,
+            'statusMessage' => "User with username 'nonExistUsername' not found.",
+        ]);
+    }
+
+    public function tryToSignInWithIncorrectUserPassword(ApiTester $I)
+    {
+        /** @var User $user */
+        $user = $I->grabFixture('users', 0);
+        $I->sendPOST(Url::to('/auth/sign-in'), [
+            'username' => $user->username,
+            'password' => 'incorrectPassword',
+        ]);
+        $I->seeResponseContainsJson([
+            'success' => false,
+            'statusMessage' => "Incorrect user password",
+        ]);
     }
 }
