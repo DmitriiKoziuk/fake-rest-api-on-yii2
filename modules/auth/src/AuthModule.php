@@ -36,7 +36,7 @@ class AuthModule extends Module
 
     private function addControllersToApp(BaseApp $app): void
     {
-        if ($app instanceof WebApp && 'app-backend' == $app->id) {
+        if ($app instanceof WebApp && ('app-backend' == $app->id || 'app-backend-tests' == $app->id)) {
             $this->controllerNamespace = __NAMESPACE__ . '\controllers\backend';
         }
     }
