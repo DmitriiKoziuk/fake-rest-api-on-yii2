@@ -15,8 +15,9 @@ class UserSignUpForm extends Model
         return [
             [['username', 'email', 'password'], 'required'],
             [['username'], 'string', 'max' => 255],
-            [['email'], 'string', 'max' => 255],
+            [['email'], 'string', 'max' => 254],
             [['password'], 'string', 'max' => 255],
+            ['email', 'email'],
         ];
     }
 }
