@@ -54,7 +54,6 @@ class SignInController extends Controller
             $return['data'] = $e->getAttributeErrors();
         } catch (UserNotFoundException $e) {
             $return['statusMessage'] = $e->getMessage();
-            $return['data'] = ['username' => 'Not found'];
         } catch (UserPasswordIncorrectException $e) {
             $return['statusMessage'] = 'Incorrect user password';
             $return['data'] = ['password' => 'Incorrect user password'];

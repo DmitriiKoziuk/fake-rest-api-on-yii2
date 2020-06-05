@@ -58,7 +58,7 @@ class SignInCest
         ]);
         $I->seeResponseContainsJson([
             'success' => false,
-            'statusMessage' => "User with username 'nonExistUsername' not found.",
+            'statusMessage' => "User not found.",
         ]);
     }
 

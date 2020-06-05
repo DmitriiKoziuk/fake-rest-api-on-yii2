@@ -27,7 +27,7 @@ class UserAuthService
     {
         $user = User::findByUsername($userLoginForm->username);
         if (empty($user)) {
-            throw new UserNotFoundException("User with username '{$userLoginForm->username}' not found.");
+            throw new UserNotFoundException();
         }
         if (! $user->validatePassword($userLoginForm->password)) {
             throw new UserPasswordIncorrectException(

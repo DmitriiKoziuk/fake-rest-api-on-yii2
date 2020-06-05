@@ -4,4 +4,5 @@ namespace DmitriiKoziuk\FakeRestApiModules\Auth\exceptions;
 
 class UserNotFoundException extends \Exception
 {
+    protected $message = 'User not found.';
 }
