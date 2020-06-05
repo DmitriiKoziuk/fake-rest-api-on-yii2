@@ -18,4 +18,26 @@ class UserSignUpFormTest extends Unit
             'userApiKeys' => UserApiKeyEntityFixture::class,
         ];
     }
+
+    public function validDataProvider()
+    {
+        return [
+            [
+                'username' => 'a',
+                'email' => 'a',
+                'password' => 'a'
+            ],
+        ];
+    }
+
+    public function notValidDataProvider()
+    {
+        return [
+            [
+                'username' => '',
+                'email' => '',
+                'password' => ''
+            ],
+        ];
+    }
 }
