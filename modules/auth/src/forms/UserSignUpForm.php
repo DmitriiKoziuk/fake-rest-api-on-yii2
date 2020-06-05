@@ -6,9 +6,9 @@ use yii\base\Model;
 
 class UserSignUpForm extends Model
 {
-    public string $username;
-    public string $email;
-    public string $password;
+    public ?string $username = null;
+    public ?string $email = null;
+    public ?string $password = null;
 
     public function rules()
     {
