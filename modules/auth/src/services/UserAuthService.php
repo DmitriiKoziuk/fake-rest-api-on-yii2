@@ -47,9 +47,7 @@ class UserAuthService
      */
     public function signUpUser(UserSignUpForm $userSignUpForm): array
     {
-        if (! $userSignUpForm->validate()) {
-            throw new UserSignUpFormNotValidException($userSignUpForm->getErrors());
-        }
+        $this->validateUserSignUpForm($userSignUpForm);
         $userEntity = User::findByUsername($userSignUpForm->username);
         if (! empty($userEntity)) {
             throw new UserAlreadyExistException();
@@ -100,5 +98,12 @@ class UserAuthService
         $user->generateEmailVerificationToken();
         $user->save();
         return $user;
+    }
+
+    private function validateUserSignUpForm(UserSignUpForm $userSignUpForm): void
+    {
+        if (! $userSignUpForm->validate()) {
+            throw new UserSignUpFormNotValidException($userSignUpForm->getErrors());
+        }
     }
 }
