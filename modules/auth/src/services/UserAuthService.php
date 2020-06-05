@@ -47,7 +47,7 @@ class UserAuthService
     public function signUpUser(UserSignUpForm $userSignUpForm): array
     {
         if (! $userSignUpForm->validate()) {
-            throw new UserSignUpFormNotValidException();
+            throw new UserSignUpFormNotValidException($userSignUpForm->getErrors());
         }
         $userEntity = User::findByUsername($userSignUpForm->username);
         if (! empty($userEntity)) {
