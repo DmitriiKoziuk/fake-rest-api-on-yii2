@@ -112,6 +112,21 @@ class UserAuthServiceTest extends \Codeception\Test\Unit
         $userAuthService->signUpUser($userSignUpForm);
     }
 
+    public function testMethodSaveUserWork()
+    {
+        /** @var UserAuthService $userAuthService */
+        $userAuthService = Yii::$container->get(UserAuthService::class);
+        $method = $this->makeMethodPublic($userAuthService, 'saveUser');
+        $userSignUpForm = new UserSignUpForm([
+            'username' => 'nonExistUserName',
+            'email' => 'nonExistEmail@g.com',
+            'password' => 'nonExistPassword',
+        ]);
+        $this->tester->dontSeeRecord(User::class, ['username' => $userSignUpForm->username]);
+        $this->assertInstanceOf(User::class, $method->invoke($userAuthService, $userSignUpForm));
+        $this->tester->seeRecord(User::class, ['username' => $userSignUpForm->username]);
+    }
+
     private function makeMethodPublic(object $object, string $method): \ReflectionMethod
     {
         $reflectedMethod = new \ReflectionMethod($object, $method);
