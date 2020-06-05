@@ -27,7 +27,7 @@ class UserEntityTest extends \Codeception\Test\Unit
      * @param string $apiKey
      * @dataProvider apiKeyProvider
      */
-    public function testMethodFindIdentityByAccessTokenReturnExistUserByApiKey(int $userId, string $apiKey)
+    public function testMethodFindIdentityByAccessTokenReturnApiKeyForExistUser(int $userId, string $apiKey)
     {
         $user = User::findIdentityByAccessToken($apiKey);
         $this->assertNotEmpty($user);

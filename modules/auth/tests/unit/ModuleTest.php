@@ -12,7 +12,7 @@ class ModuleTest extends \Codeception\Test\Unit
      */
     protected $tester;
 
-    public function testIsModuleLoaded()
+    public function testIsAuthModuleLoaded()
     {
         $this->assertTrue(Yii::$app->hasModule('auth'));
     }

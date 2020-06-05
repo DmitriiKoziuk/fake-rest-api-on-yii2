@@ -28,7 +28,7 @@ class UserAuthServiceTest extends \Codeception\Test\Unit
         ];
     }
 
-    public function testSignInUserWithValidData()
+    public function testMethodSignInUserReturnApiKeyForExistUser()
     {
         /** @var User $userEntity */
         $userEntity = $this->tester->grabFixture('users', 0);
@@ -45,7 +45,7 @@ class UserAuthServiceTest extends \Codeception\Test\Unit
         $this->assertEquals($userApiKeyEntity->api_key, $userApiKey);
     }
 
-    public function testSignInNotExistUser()
+    public function testMethodSignInUserThrowErrorForNonExistUser()
     {
         /** @var UserAuthService $userAuthService */
         $userAuthService = Yii::$container->get(UserAuthService::class);
@@ -58,7 +58,7 @@ class UserAuthServiceTest extends \Codeception\Test\Unit
         $userAuthService->signInUser($userLoginForm);
     }
 
-    public function testSignInExistUserWithIncorrectPassword()
+    public function testMethodSignInUserThrowErrorForUserWithIncorrectPassword()
     {
         /** @var User $userEntity */
         $userEntity = $this->tester->grabFixture('users', 0);
@@ -73,7 +73,7 @@ class UserAuthServiceTest extends \Codeception\Test\Unit
         $userAuthService->signInUser($userLoginForm);
     }
 
-    public function testResetUserApiKeyThatAlreadySet()
+    public function testMethodResetUserApiKeySuccessfulResetAlreadyExistApiKey()
     {
         /** @var User $userEntity */
         $userEntity = $this->tester->grabFixture('users', 0);
