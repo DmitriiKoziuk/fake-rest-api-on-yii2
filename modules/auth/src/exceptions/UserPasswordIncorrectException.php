@@ -4,4 +4,5 @@ namespace DmitriiKoziuk\FakeRestApiModules\Auth\exceptions;
 
 class UserPasswordIncorrectException extends \Exception
 {
+    protected $message = 'Incorrect password.';
 }

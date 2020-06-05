@@ -72,7 +72,7 @@ class SignInCest
         ]);
         $I->seeResponseContainsJson([
             'success' => false,
-            'statusMessage' => "Incorrect user password",
+            'statusMessage' => "Incorrect password.",
         ]);
     }
 }

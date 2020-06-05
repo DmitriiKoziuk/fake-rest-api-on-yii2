@@ -30,9 +30,7 @@ class UserAuthService
             throw new UserNotFoundException();
         }
         if (! $user->validatePassword($userLoginForm->password)) {
-            throw new UserPasswordIncorrectException(
-                "Incorrect password '{$userLoginForm->password}' for user '{$user->username}'"
-            );
+            throw new UserPasswordIncorrectException();
         }
         return $this->resetUserApiKey($user);
     }
