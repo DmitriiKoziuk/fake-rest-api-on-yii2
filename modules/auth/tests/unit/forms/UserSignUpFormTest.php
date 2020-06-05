@@ -6,6 +6,7 @@ use Codeception\Test\Unit;
 use DmitriiKoziuk\FakeRestApiModules\Auth\tests\UnitTester;
 use DmitriiKoziuk\FakeRestApiModules\Auth\tests\_fixtures\UserEntityFixture;
 use DmitriiKoziuk\FakeRestApiModules\Auth\tests\_fixtures\UserApiKeyEntityFixture;
+use DmitriiKoziuk\FakeRestApiModules\Auth\forms\UserSignUpForm;
 
 class UserSignUpFormTest extends Unit
 {
@@ -17,6 +18,38 @@ class UserSignUpFormTest extends Unit
             'users' => UserEntityFixture::class,
             'userApiKeys' => UserApiKeyEntityFixture::class,
         ];
+    }
+
+    /**
+     * @param string $username
+     * @param string $email
+     * @param string $password
+     * @dataProvider validDataProvider
+     */
+    public function testUserSignUpFormWithValidData(string $username, string $email, string $password)
+    {
+        $userSignUpForm = new UserSignUpForm([
+            'username' => $username,
+            'email' => $email,
+            'password' => $password,
+        ]);
+        $this->assertTrue($userSignUpForm->validate());
+    }
+
+    /**
+     * @param string $username
+     * @param string $email
+     * @param string $password
+     * @dataProvider notValidDataProvider
+     */
+    public function testUserSignUpFormWithNotValidData(string $username, string $email, string $password)
+    {
+        $userSignUpForm = new UserSignUpForm([
+            'username' => $username,
+            'email' => $email,
+            'password' => $password,
+        ]);
+        $this->assertFalse($userSignUpForm->validate());
     }
 
     public function validDataProvider()
@@ -33,10 +66,10 @@ class UserSignUpFormTest extends Unit
     public function notValidDataProvider()
     {
         return [
-            [
+            'All fields not valid' => [
                 'username' => '',
                 'email' => '',
-                'password' => ''
+                'password' => '',
             ],
         ];
     }
