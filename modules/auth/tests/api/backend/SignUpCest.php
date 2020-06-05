@@ -22,6 +22,17 @@ class SignUpCest
         $I->seeResponseContainsJson([
             'success' => false,
             'statusMessage' => "User sign up form not valid.",
+            'data' => [
+                'username' => [
+                    'Username cannot be blank.',
+                ],
+                'email' => [
+                    'Email cannot be blank.',
+                ],
+                'password' => [
+                    'Password cannot be blank.',
+                ],
+            ],
         ]);
     }
 }
