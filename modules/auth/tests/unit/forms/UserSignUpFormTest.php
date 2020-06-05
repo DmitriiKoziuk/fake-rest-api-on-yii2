@@ -56,13 +56,13 @@ class UserSignUpFormTest extends Unit
     {
         return [
             'Min symbol for all fields' => [
-                'username' => 'a',
-                'email' => 'a',
-                'password' => 'a'
+                'username' => str_repeat('a', 1),
+                'email' => 'a@a.com',
+                'password' => 'a',
             ],
             'Max symbols for all fields' => [
                 'username' => str_repeat('a', 255),
-                'email' => str_repeat('a', 255),
+                'email' => str_repeat('a', 64) . '@' . str_repeat('a', 185) . '.com',
                 'password' => str_repeat('a', 255),
             ],
         ];
