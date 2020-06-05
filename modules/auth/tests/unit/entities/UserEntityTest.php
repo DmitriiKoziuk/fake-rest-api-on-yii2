@@ -2,10 +2,11 @@
 
 namespace DmitriiKoziuk\FakeRestApiModules\Auth\tests\unit\entities;
 
-use DmitriiKoziuk\FakeRestApiModules\Auth\entities\User;
 use DmitriiKoziuk\FakeRestApiModules\Auth\tests\UnitTester;
 use DmitriiKoziuk\FakeRestApiModules\Auth\tests\_fixtures\UserEntityFixture;
 use DmitriiKoziuk\FakeRestApiModules\Auth\tests\_fixtures\UserApiKeyEntityFixture;
+use DmitriiKoziuk\FakeRestApiModules\Auth\entities\User;
+use DmitriiKoziuk\FakeRestApiModules\Auth\entities\UserApiKeyEntity;
 
 class UserEntityTest extends \Codeception\Test\Unit
 {
@@ -22,17 +23,14 @@ class UserEntityTest extends \Codeception\Test\Unit
         ];
     }
 
-    /**
-     * @param int    $userId
-     * @param string $apiKey
-     * @dataProvider apiKeyProvider
-     */
-    public function testMethodFindIdentityByAccessTokenReturnApiKeyForExistUser(int $userId, string $apiKey)
+    public function testMethodFindIdentityByAccessTokenReturnApiKeyForExistUser()
     {
-        $user = User::findIdentityByAccessToken($apiKey);
-        $this->assertNotEmpty($user);
-        $this->assertInstanceOf(User::class, $user);
-        $this->assertEquals($userId, $user->id);
+        /** @var UserApiKeyEntity $apiKeyEntity */
+        $apiKeyEntity = $this->tester->grabFixture('userApiKeys', 0);
+        $userEntity = User::findIdentityByAccessToken($apiKeyEntity->api_key);
+        $this->assertNotEmpty($userEntity);
+        $this->assertInstanceOf(User::class, $userEntity);
+        $this->assertEquals($apiKeyEntity->user->id, $userEntity->id);
     }
 
     public function testMethodFindIdentityByAccessTokenReturnNullForNonExistApiKey(
@@ -40,13 +38,5 @@ class UserEntityTest extends \Codeception\Test\Unit
     ) {
         $user = User::findIdentityByAccessToken($apiKey);
         $this->assertEmpty($user);
-    }
-
-    public function apiKeyProvider()
-    {
-        $keys = include __DIR__ . '/../../_fixtures/data/auth_user_api_keys.php';
-        return [
-            $keys[ array_key_first($keys) ],
-        ];
     }
 }
