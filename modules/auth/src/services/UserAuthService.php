@@ -8,6 +8,7 @@ use DmitriiKoziuk\FakeRestApiModules\Auth\entities\User;
 use DmitriiKoziuk\FakeRestApiModules\Auth\entities\UserApiKeyEntity;
 use DmitriiKoziuk\FakeRestApiModules\Auth\exceptions\UserPasswordIncorrectException;
 use DmitriiKoziuk\FakeRestApiModules\Auth\forms\UserLoginForm;
+use DmitriiKoziuk\FakeRestApiModules\Auth\forms\UserSignUpForm;
 use DmitriiKoziuk\FakeRestApiModules\Auth\exceptions\UserNotFoundException;
 use DmitriiKoziuk\FakeRestApiModules\Auth\exceptions\UserApiKeySaveException;
 
@@ -33,6 +34,11 @@ class UserAuthService
             throw new UserPasswordIncorrectException();
         }
         return $this->resetUserApiKey($user);
+    }
+
+    public function signUpUser(UserSignUpForm $userSignUpForm): string
+    {
+        return '';
     }
 
     /**
