@@ -13,6 +13,7 @@ use DmitriiKoziuk\FakeRestApiModules\Auth\entities\UserApiKeyEntity;
 use DmitriiKoziuk\FakeRestApiModules\Auth\services\UserAuthService;
 use DmitriiKoziuk\FakeRestApiModules\Auth\exceptions\UserNotFoundException;
 use DmitriiKoziuk\FakeRestApiModules\Auth\exceptions\UserPasswordIncorrectException;
+use DmitriiKoziuk\FakeRestApiModules\Auth\exceptions\UserAlreadyExistException;
 use DmitriiKoziuk\FakeRestApiModules\Auth\exceptions\forms\UserSignUpFormNotValidException;
 
 class UserAuthServiceTest extends \Codeception\Test\Unit
@@ -93,6 +94,21 @@ class UserAuthServiceTest extends \Codeception\Test\Unit
         $userAuthService = Yii::$container->get(UserAuthService::class);
         $userSignUpForm = new UserSignUpForm();
         $this->expectException(UserSignUpFormNotValidException::class);
+        $userAuthService->signUpUser($userSignUpForm);
+    }
+
+    public function testMethodSignUpUserThrowErrorForAlreadyExistUser()
+    {
+        /** @var UserAuthService $userAuthService */
+        $userAuthService = Yii::$container->get(UserAuthService::class);
+        /** @var User $userEntity */
+        $userEntity = $this->tester->grabFixture('users', 0);
+        $userSignUpForm = new UserSignUpForm([
+            'username' => $userEntity->username,
+            'email' => $userEntity->email,
+            'password' => 'password',
+        ]);
+        $this->expectException(UserAlreadyExistException::class);
         $userAuthService->signUpUser($userSignUpForm);
     }
 
