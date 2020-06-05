@@ -48,10 +48,7 @@ class UserAuthService
     public function signUpUser(UserSignUpForm $userSignUpForm): array
     {
         $this->validateUserSignUpForm($userSignUpForm);
-        $userEntity = User::findByUsername($userSignUpForm->username);
-        if (! empty($userEntity)) {
-            throw new UserAlreadyExistException();
-        }
+        $this->checkIsUserAlreadyExist($userSignUpForm);
         $transaction = Yii::$app->db->beginTransaction();
         try {
             $userEntity = $this->saveUser($userSignUpForm);
@@ -104,6 +101,14 @@ class UserAuthService
     {
         if (! $userSignUpForm->validate()) {
             throw new UserSignUpFormNotValidException($userSignUpForm->getErrors());
+        }
+    }
+
+    private function checkIsUserAlreadyExist(UserSignUpForm $userSignUpForm): void
+    {
+        $userEntity = User::findByUsername($userSignUpForm->username);
+        if (! empty($userEntity)) {
+            throw new UserAlreadyExistException();
         }
     }
 }
