@@ -55,10 +55,15 @@ class UserSignUpFormTest extends Unit
     public function validDataProvider()
     {
         return [
-            [
+            'Min symbol for all fields' => [
                 'username' => 'a',
                 'email' => 'a',
                 'password' => 'a'
+            ],
+            'Max symbols for all fields' => [
+                'username' => str_repeat('a', 255),
+                'email' => str_repeat('a', 255),
+                'password' => str_repeat('a', 255),
             ],
         ];
     }
