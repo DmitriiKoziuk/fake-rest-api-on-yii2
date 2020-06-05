@@ -22,13 +22,7 @@ class SignUpController extends Controller
                 'statusMessage' => '',
                 'data' => [],
             ];
-            $userSignUpForm = new UserSignUpForm();
-            if (!
-                $userSignUpForm->load(Yii::$app->request->post(), '') &&
-                ! $userSignUpForm->validate()
-            ) {
-                throw new UserSignUpFormNotValidException($userSignUpForm->getErrors());
-            }
+            $userSignUpForm = $this->loadDataToUserSignUpForm();
         } catch (UserSignUpFormNotValidException $e) {
             $response['statusMessage'] = $e->getMessage();
             $response['data'] = $e->getValidationErrors();
@@ -36,5 +30,17 @@ class SignUpController extends Controller
             $response['statusMessage'] = 'Internal application error.';
         }
         return $response;
+    }
+
+    private function loadDataToUserSignUpForm(): UserSignUpForm
+    {
+        $userSignUpForm = new UserSignUpForm();
+        if (!
+            $userSignUpForm->load(Yii::$app->request->post(), '') &&
+            ! $userSignUpForm->validate()
+        ) {
+            throw new UserSignUpFormNotValidException($userSignUpForm->getErrors());
+        }
+        return $userSignUpForm;
     }
 }
