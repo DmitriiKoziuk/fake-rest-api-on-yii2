@@ -7,6 +7,7 @@ use DmitriiKoziuk\FakeRestApiModules\Auth\tests\UnitTester;
 use DmitriiKoziuk\FakeRestApiModules\Auth\tests\_fixtures\UserEntityFixture;
 use DmitriiKoziuk\FakeRestApiModules\Auth\tests\_fixtures\UserApiKeyEntityFixture;
 use DmitriiKoziuk\FakeRestApiModules\Auth\forms\UserLoginForm;
+use DmitriiKoziuk\FakeRestApiModules\Auth\forms\UserSignUpForm;
 use DmitriiKoziuk\FakeRestApiModules\Auth\entities\User;
 use DmitriiKoziuk\FakeRestApiModules\Auth\entities\UserApiKeyEntity;
 use DmitriiKoziuk\FakeRestApiModules\Auth\services\UserAuthService;
@@ -83,6 +84,15 @@ class UserAuthServiceTest extends \Codeception\Test\Unit
         $newApiKey = $resetUserApiKeyMethod->invoke($userAuthService, $userEntity);
         $userApiKeyEntity = $this->tester->grabRecord(UserApiKeyEntity::class, ['user_id' => $userEntity->id]);
         $this->assertEquals($userApiKeyEntity->api_key, $newApiKey);
+    }
+
+    public function testMethodSignUpUserThrowErrorForNotValidSignUpUserForm()
+    {
+        /** @var UserAuthService $userAuthService */
+        $userAuthService = Yii::$container->get(UserAuthService::class);
+        $userSignUpForm = new UserSignUpForm();
+        $this->expectException(UserSignUpFormNotValidException::class);
+        $userAuthService->signUpUser($userSignUpForm);
     }
 
     private function makeMethodPublic(object $object, string $method): \ReflectionMethod
