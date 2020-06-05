@@ -127,6 +127,28 @@ class UserAuthServiceTest extends \Codeception\Test\Unit
         $this->tester->seeRecord(User::class, ['username' => $userSignUpForm->username]);
     }
 
+
+    public function testMethodSignUpUserSuccessfulCreateNewUserWithApiKey()
+    {
+        /** @var UserAuthService $userAuthService */
+        $userAuthService = Yii::$container->get(UserAuthService::class);
+        $userSignUpForm = new UserSignUpForm([
+            'username' => 'nonExistUserName',
+            'email' => 'nonExistEmail@g.com',
+            'password' => 'nonExistPassword',
+        ]);
+        $this->tester->dontSeeRecord(User::class, ['username' => $userSignUpForm->username]);
+        $createdUserData = $userAuthService->signUpUser($userSignUpForm);
+        $this->assertIsArray($createdUserData);
+        $this->assertArrayHasKey('userId', $createdUserData);
+        $this->assertArrayHasKey('apiKey', $createdUserData);
+        $this->tester->seeRecord(User::class, ['id' => $createdUserData['userId']]);
+        $this->tester->seeRecord(UserApiKeyEntity::class, [
+            'user_id' => $createdUserData['userId'],
+            'api_key' => $createdUserData['apiKey'],
+        ]);
+    }
+
     private function makeMethodPublic(object $object, string $method): \ReflectionMethod
     {
         $reflectedMethod = new \ReflectionMethod($object, $method);
