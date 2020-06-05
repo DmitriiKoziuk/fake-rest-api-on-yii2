@@ -40,11 +40,11 @@ class UserAuthService
 
     /**
      * @param UserSignUpForm $userSignUpForm
-     * @return string
+     * @return array ['userId' =>, 'apiKey' =>]
      * @throws UserSignUpFormNotValidException
      * @throws UserAlreadyExistException
      */
-    public function signUpUser(UserSignUpForm $userSignUpForm): string
+    public function signUpUser(UserSignUpForm $userSignUpForm): array
     {
         if (! $userSignUpForm->validate()) {
             throw new UserSignUpFormNotValidException();
@@ -53,7 +53,12 @@ class UserAuthService
         if (! empty($userEntity)) {
             throw new UserAlreadyExistException();
         }
-        return '';
+        $userEntity = $this->saveUser($userSignUpForm);
+        $userApiKey = $this->resetUserApiKey($userEntity);
+        return [
+            'userId' => $userEntity->id,
+            'apiKey' => $userApiKey,
+        ];
     }
 
     /**
