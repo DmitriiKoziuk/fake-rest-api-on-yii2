@@ -27,10 +27,11 @@ class SignUpController extends Controller
                 $userSignUpForm->load(Yii::$app->request->post()) &&
                 ! $userSignUpForm->validate()
             ) {
-                throw new UserSignUpFormNotValidException();
+                throw new UserSignUpFormNotValidException($userSignUpForm->getErrors());
             }
         } catch (UserSignUpFormNotValidException $e) {
             $return['statusMessage'] = $e->getMessage();
+            $return['data'] = $e->getValidationErrors();
         } catch (\Throwable $e) {
             $return['statusMessage'] = 'Internal application error.';
         }
