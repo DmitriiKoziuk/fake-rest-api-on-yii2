@@ -11,6 +11,6 @@ class SignUpCest
     {
         $I->sendGET(Url::to(['/auth/sign-up']));
         $I->seeResponseCodeIs(200);
-        $I->seeResponseContains('Hello');
+        $I->seeResponseContains('Hello, SignUp');
     }
 }
