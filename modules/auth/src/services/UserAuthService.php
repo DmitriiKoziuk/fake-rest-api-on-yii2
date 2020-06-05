@@ -43,6 +43,7 @@ class UserAuthService
      * @return array ['userId' =>, 'apiKey' =>]
      * @throws UserSignUpFormNotValidException
      * @throws UserAlreadyExistException
+     * @throws \Throwable
      */
     public function signUpUser(UserSignUpForm $userSignUpForm): array
     {
@@ -53,8 +54,15 @@ class UserAuthService
         if (! empty($userEntity)) {
             throw new UserAlreadyExistException();
         }
-        $userEntity = $this->saveUser($userSignUpForm);
-        $userApiKey = $this->resetUserApiKey($userEntity);
+        $transaction = Yii::$app->db->beginTransaction();
+        try {
+            $userEntity = $this->saveUser($userSignUpForm);
+            $userApiKey = $this->resetUserApiKey($userEntity);
+            $transaction->commit();
+        } catch (\Throwable $e) {
+            $transaction->rollBack();
+            throw $e;
+        }
         return [
             'userId' => $userEntity->id,
             'apiKey' => $userApiKey,
