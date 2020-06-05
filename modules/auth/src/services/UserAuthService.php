@@ -76,4 +76,16 @@ class UserAuthService
         }
         return $userApiKeyEntity->api_key;
     }
+
+    private function saveUser(UserSignUpForm $userSignUpForm): User
+    {
+        $user = new User();
+        $user->username = $userSignUpForm->username;
+        $user->email = $userSignUpForm->email;
+        $user->setPassword($userSignUpForm->password);
+        $user->generateAuthKey();
+        $user->generateEmailVerificationToken();
+        $user->save();
+        return $user;
+    }
 }
