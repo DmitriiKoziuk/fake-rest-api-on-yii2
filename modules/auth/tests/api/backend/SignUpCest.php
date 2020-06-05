@@ -63,4 +63,27 @@ class SignUpCest
             'statusMessage' => "User already exist.",
         ]);
     }
+
+    public function tryToSignUpWithValidUserData(ApiTester $I)
+    {
+        $userValidData = [
+            'username' => 'someNonExistUser',
+            'email' => 'a@a.com',
+            'password' => 'password_0',
+        ];
+        $I->dontSeeRecord(User::class, ['username' => $userValidData['username']]);
+        $I->sendPOST(Url::to(['/auth/sign-up']), $userValidData);
+        $I->seeRecord(User::class, ['username' => $userValidData['username']]);
+        /** @var User $createdUserEntity */
+        $createdUserEntity = $I->grabRecord(User::class, ['username' => $userValidData['username']]);
+        $I->seeResponseCodeIs(200);
+        $I->seeResponseContainsJson([
+            'success' => true,
+            'statusMessage' => "User created.",
+            'data' => [
+                'userId' => $createdUserEntity->id,
+                'apiKey' => $createdUserEntity->apiKeyEntity->api_key,
+            ],
+        ]);
+    }
 }
