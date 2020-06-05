@@ -57,7 +57,7 @@ class SignInController extends Controller
         } catch (UserPasswordIncorrectException $e) {
             $return['statusMessage'] = $e->getMessage();
         } catch (\Throwable $e) {
-            $return['statusMessage'] = 'Internal application error';
+            $return['statusMessage'] = 'Internal application error.';
         }
         return $return;
     }
