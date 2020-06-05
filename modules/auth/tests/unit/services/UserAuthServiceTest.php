@@ -112,11 +112,11 @@ class UserAuthServiceTest extends \Codeception\Test\Unit
         $userAuthService->signUpUser($userSignUpForm);
     }
 
-    public function testMethodSaveUserWork()
+    public function testMethodCreateUserWork()
     {
         /** @var UserAuthService $userAuthService */
         $userAuthService = Yii::$container->get(UserAuthService::class);
-        $method = $this->makeMethodPublic($userAuthService, 'saveUser');
+        $method = $this->makeMethodPublic($userAuthService, 'createUser');
         $userSignUpForm = new UserSignUpForm([
             'username' => 'nonExistUserName',
             'email' => 'nonExistEmail@g.com',

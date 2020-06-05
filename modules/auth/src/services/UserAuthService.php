@@ -51,7 +51,7 @@ class UserAuthService
         $this->checkIsUserAlreadyExist($userSignUpForm);
         $transaction = Yii::$app->db->beginTransaction();
         try {
-            $userEntity = $this->saveUser($userSignUpForm);
+            $userEntity = $this->createUser($userSignUpForm);
             $userApiKey = $this->resetUserApiKey($userEntity);
             $transaction->commit();
         } catch (\Throwable $e) {
@@ -85,7 +85,7 @@ class UserAuthService
         return $userApiKeyEntity->api_key;
     }
 
-    private function saveUser(UserSignUpForm $userSignUpForm): User
+    private function createUser(UserSignUpForm $userSignUpForm): User
     {
         $user = new User();
         $user->username = $userSignUpForm->username;
