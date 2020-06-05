@@ -24,7 +24,7 @@ class SignUpController extends Controller
             ];
             $userSignUpForm = new UserSignUpForm();
             if (!
-                $userSignUpForm->load(Yii::$app->request->post()) &&
+                $userSignUpForm->load(Yii::$app->request->post(), '') &&
                 ! $userSignUpForm->validate()
             ) {
                 throw new UserSignUpFormNotValidException($userSignUpForm->getErrors());
