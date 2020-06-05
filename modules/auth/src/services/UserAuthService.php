@@ -11,6 +11,7 @@ use DmitriiKoziuk\FakeRestApiModules\Auth\forms\UserLoginForm;
 use DmitriiKoziuk\FakeRestApiModules\Auth\forms\UserSignUpForm;
 use DmitriiKoziuk\FakeRestApiModules\Auth\exceptions\UserNotFoundException;
 use DmitriiKoziuk\FakeRestApiModules\Auth\exceptions\UserApiKeySaveException;
+use DmitriiKoziuk\FakeRestApiModules\Auth\exceptions\forms\UserSignUpFormNotValidException;
 
 class UserAuthService
 {
@@ -36,8 +37,17 @@ class UserAuthService
         return $this->resetUserApiKey($user);
     }
 
+    /**
+     * @param UserSignUpForm $userSignUpForm
+     * @return string
+     * @throws UserSignUpFormNotValidException
+     */
     public function signUpUser(UserSignUpForm $userSignUpForm): string
     {
+        if (! $userSignUpForm->validate()) {
+            throw new UserSignUpFormNotValidException();
+        }
+
         return '';
     }
 
