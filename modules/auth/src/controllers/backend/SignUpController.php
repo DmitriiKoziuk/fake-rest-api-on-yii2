@@ -37,6 +37,8 @@ class SignUpController extends Controller
                 'data' => [],
             ];
             $response['data'] = $this->userAuthService->signUpUser($this->loadDataToUserSignUpForm());
+            $response['success'] = true;
+            $response['statusMessage'] = 'User created.';
         } catch (UserSignUpFormNotValidException $e) {
             $response['statusMessage'] = $e->getMessage();
             $response['data'] = $e->getValidationErrors();
