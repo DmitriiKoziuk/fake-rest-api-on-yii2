@@ -6,9 +6,23 @@ use Yii;
 use yii\rest\Controller;
 use DmitriiKoziuk\FakeRestApiModules\Auth\forms\UserSignUpForm;
 use DmitriiKoziuk\FakeRestApiModules\Auth\exceptions\forms\UserSignUpFormNotValidException;
+use DmitriiKoziuk\FakeRestApiModules\Auth\services\UserAuthService;
+use DmitriiKoziuk\FakeRestApiModules\Auth\exceptions\UserAlreadyExistException;
 
 class SignUpController extends Controller
 {
+    private UserAuthService $userAuthService;
+
+    public function __construct(
+        $id,
+        $module,
+        UserAuthService $userAuthService,
+        $config = []
+    ) {
+        parent::__construct($id, $module, $config);
+        $this->userAuthService = $userAuthService;
+    }
+
     public function actionIndex()
     {
         return 'Hello, SignUp';
@@ -23,9 +37,12 @@ class SignUpController extends Controller
                 'data' => [],
             ];
             $userSignUpForm = $this->loadDataToUserSignUpForm();
+            $response['data'] = $this->userAuthService->signUpUser($userSignUpForm);
         } catch (UserSignUpFormNotValidException $e) {
             $response['statusMessage'] = $e->getMessage();
             $response['data'] = $e->getValidationErrors();
+        } catch (UserAlreadyExistException $e) {
+            $response['statusMessage'] = $e->getMessage();
         } catch (\Throwable $e) {
             $response['statusMessage'] = 'Internal application error.';
         }
