@@ -17,7 +17,7 @@ class SignUpController extends Controller
     public function actionCreate(): array
     {
         try {
-            $return = [
+            $response = [
                 'success' => false,
                 'statusMessage' => '',
                 'data' => [],
@@ -30,11 +30,11 @@ class SignUpController extends Controller
                 throw new UserSignUpFormNotValidException($userSignUpForm->getErrors());
             }
         } catch (UserSignUpFormNotValidException $e) {
-            $return['statusMessage'] = $e->getMessage();
-            $return['data'] = $e->getValidationErrors();
+            $response['statusMessage'] = $e->getMessage();
+            $response['data'] = $e->getValidationErrors();
         } catch (\Throwable $e) {
-            $return['statusMessage'] = 'Internal application error.';
+            $response['statusMessage'] = 'Internal application error.';
         }
-        return $return;
+        return $response;
     }
 }
