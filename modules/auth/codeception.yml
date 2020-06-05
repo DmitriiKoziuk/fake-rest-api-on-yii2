@@ -17,7 +17,8 @@ coverage:
     enabled: true
     whitelist:
         include:
-            - src
+            - src/forms/*
+            - src/services/*
 env:
     backend:
         coverage:
