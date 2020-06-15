@@ -75,4 +75,19 @@ class SignInCest
             'statusMessage' => "Incorrect password.",
         ]);
     }
+
+    public function tryToSignInInactiveUser(ApiTester $I)
+    {
+        $userEntity = $I->grabFixture('users', 'inactive');
+        $I->sendPOST(Url::to('/auth/sign-in'), [
+            'username' => $userEntity->username,
+            'password' => 'password_0',
+        ]);
+        $I->seeResponseCodeIs(200);
+        $I->seeResponseIsJson();
+        $I->seeResponseContainsJson([
+            'success' => false,
+            'statusMessage' => "User inactive.",
+        ]);
+    }
 }
