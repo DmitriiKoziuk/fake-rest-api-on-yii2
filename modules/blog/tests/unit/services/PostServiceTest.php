@@ -38,4 +38,21 @@ class PostServiceTest extends \Codeception\Test\Unit
         $this->expectException(PostCreateFormNotValidException::class);
         $postService->createPost($postCreateForm);
     }
+
+    public function testMethodCreatePostReturnCreatedPostData()
+    {
+        /** @var PostService $postService */
+        $postService = Yii::$container->get(PostService::class);
+        $postCreateForm = new PostCreateForm([
+            'title' => 'New post title',
+            'body' => 'New post body',
+        ]);
+        $postData = $postService->createPost($postCreateForm);
+        $this->assertIsArray($postData);
+        $this->assertArrayHasKey('id', $postData);
+        $this->assertArrayHasKey('title', $postData);
+        $this->assertArrayHasKey('body', $postData);
+        $this->assertEquals($postCreateForm->title, $postData['title']);
+        $this->assertEquals($postCreateForm->body, $postData['body']);
+    }
 }
