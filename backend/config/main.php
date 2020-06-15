@@ -15,9 +15,12 @@ return [
     'components' => [
         'request' => [
             'csrfParam' => '_csrf-backend',
+            'parsers' => [
+                'application/json' => 'yii\web\JsonParser',
+            ],
         ],
         'user' => [
-            'identityClass' => 'common\models\User',
+            'identityClass' => \DmitriiKoziuk\FakeRestApiModules\Auth\entities\User::class,
             'enableAutoLogin' => true,
             'identityCookie' => ['name' => '_identity-backend', 'httpOnly' => true],
         ],
@@ -37,14 +40,26 @@ return [
         'errorHandler' => [
             'errorAction' => 'site/error',
         ],
-        /*
         'urlManager' => [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
             'rules' => [
+                [
+                    'class' => 'yii\rest\UrlRule',
+                    'controller' => 'blog/post'
+                ],
+                [
+                    'class' => 'yii\rest\UrlRule',
+                    'pluralize'  => false,
+                    'controller' => 'auth/sign-in'
+                ],
+                [
+                    'class' => 'yii\rest\UrlRule',
+                    'pluralize'  => false,
+                    'controller' => 'auth/sign-up'
+                ],
             ],
         ],
-        */
     ],
     'params' => $params,
 ];

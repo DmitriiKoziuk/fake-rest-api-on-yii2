@@ -10,4 +10,16 @@ return [
             'class' => 'yii\caching\FileCache',
         ],
     ],
+    'modules' => [
+        'blog' => [
+            'class' => \DmitriiKoziuk\FakeRestApiModules\Blog\BlogModule::class,
+        ],
+        'auth' => [
+            'class' => \DmitriiKoziuk\FakeRestApiModules\Auth\AuthModule::class,
+        ],
+    ],
+    'bootstrap' => [
+        'blog',
+        'auth',
+    ],
 ];

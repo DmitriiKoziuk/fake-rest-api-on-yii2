@@ -1,0 +1,8 @@
+suite_namespace: DmitriiKoziuk\FakeRestApiModules\Auth\tests\acceptance
+actor: AcceptanceTester
+modules:
+    enabled:
+        - PhpBrowser:
+            url: http://localhost:8000
+        - Yii2:
+            part: [init, orm, fixtures]
