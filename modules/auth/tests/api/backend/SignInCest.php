@@ -28,7 +28,6 @@ class SignInCest
 
     /**
      * @param ApiTester $I
-     * @depends tryToCheckIsSignInResourceWork
      */
     public function tryToSignInWithValidData(ApiTester $I)
     {
@@ -39,13 +38,15 @@ class SignInCest
             'password' => 'password_0',
         ]);
         $I->seeResponseCodeIs(200);
+        $I->seeResponseIsJson();
         /** @var UserApiKeyEntity $userApiKeyEntity */
         $userApiKeyEntity = $I->grabRecord(UserApiKeyEntity::class, ['user_id' => $user->id]);
         $I->seeResponseContainsJson([
             'success' => true,
             'statusMessage' => 'Ok',
             'data' => [
-                'apiKey' => $userApiKeyEntity->api_key
+                'userId' => $user->id,
+                'apiKey' => $userApiKeyEntity->api_key,
             ],
         ]);
     }

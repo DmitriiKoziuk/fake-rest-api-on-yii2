@@ -20,7 +20,7 @@ class UserAuthService
     /**
      * Return api key if user exist
      * @param UserLoginForm $userLoginForm
-     * @return string
+     * @return array ['userId' =>, 'apiKey' =>]
      * @throws Exception
      * @throws UserApiKeySaveException
      * @throws UserNotFoundException
@@ -28,7 +28,7 @@ class UserAuthService
      * @throws UserPasswordIncorrectException
      * @throws \Throwable
      */
-    public function signInUser(UserLoginForm $userLoginForm): string
+    public function signInUser(UserLoginForm $userLoginForm): array
     {
         /** @var User $user */
         $user = User::find()
@@ -44,7 +44,10 @@ class UserAuthService
         if (! $user->validatePassword($userLoginForm->password)) {
             throw new UserPasswordIncorrectException();
         }
-        return $this->resetUserApiKey($user);
+        return [
+            'userId' => $user->id,
+            'apiKey' => $this->resetUserApiKey($user),
+        ];
     }
 
     /**

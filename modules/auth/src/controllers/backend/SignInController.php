@@ -45,9 +45,7 @@ class SignInController extends Controller
             ) {
                 throw new UserLoginFormNotValidException($userLoginForm->getErrors());
             }
-            $return['data'] = [
-                'apiKey' => $this->userAuthService->signInUser($userLoginForm),
-            ];
+            $return['data'] = $this->userAuthService->signInUser($userLoginForm);
             $return['success'] = true;
             $return['statusMessage'] = 'Ok';
         } catch (UserLoginFormNotValidException $e) {

@@ -32,7 +32,7 @@ class UserAuthServiceTest extends \Codeception\Test\Unit
         ];
     }
 
-    public function testMethodSignInUserReturnApiKeyForExistUser()
+    public function testMethodSignInUserWithValidUserData()
     {
         /** @var User $userEntity */
         $userEntity = $this->tester->grabFixture('users', 0);
@@ -44,9 +44,12 @@ class UserAuthServiceTest extends \Codeception\Test\Unit
         ]);
         $this->assertTrue($userLoginForm->validate());
         /** @var UserApiKeyEntity $userApiKeyEntity */
-        $userApiKey = $userAuthService->signInUser($userLoginForm);
+        $userData = $userAuthService->signInUser($userLoginForm);
         $userApiKeyEntity = $this->tester->grabRecord(UserApiKeyEntity::class, ['user_id' => $userEntity->id]);
-        $this->assertEquals($userApiKeyEntity->api_key, $userApiKey);
+        $this->assertArrayHasKey('userId', $userData);
+        $this->assertArrayHasKey('apiKey', $userData);
+        $this->assertEquals($userEntity->id, $userData['userId']);
+        $this->assertEquals($userApiKeyEntity->api_key, $userData['apiKey']);
     }
 
     public function testMethodSignInUserThrowErrorForNonExistUser()
