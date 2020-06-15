@@ -145,6 +145,21 @@ class UserAuthServiceTest extends \Codeception\Test\Unit
         $userAuthService->signUpUser($userSignUpForm);
     }
 
+    public function testMethodSignUpUserThrowErrorForDeletedUser()
+    {
+        /** @var UserAuthService $userAuthService */
+        $userAuthService = Yii::$container->get(UserAuthService::class);
+        /** @var User $userEntity */
+        $userEntity = $this->tester->grabFixture('users', 'deleted');
+        $userSignUpForm = new UserSignUpForm([
+            'username' => $userEntity->username,
+            'email' => $userEntity->email,
+            'password' => 'password',
+        ]);
+        $this->expectException(UserAlreadyExistException::class);
+        $userAuthService->signUpUser($userSignUpForm);
+    }
+
     public function testMethodCreateUserWork()
     {
         /** @var UserAuthService $userAuthService */
