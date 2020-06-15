@@ -123,7 +123,10 @@ class UserAuthService
 
     private function checkIsUserAlreadyExist(UserSignUpForm $userSignUpForm): void
     {
-        $userEntity = User::findByUsername($userSignUpForm->username);
+        $userEntity = User::find()
+            ->where(['username' => $userSignUpForm->username])
+            ->limit(1)
+            ->one();
         if (! empty($userEntity)) {
             throw new UserAlreadyExistException();
         }
