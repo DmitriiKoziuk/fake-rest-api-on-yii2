@@ -53,6 +53,11 @@ return [
                     'pluralize'  => false,
                     'controller' => 'auth/sign-in'
                 ],
+                [
+                    'class' => 'yii\rest\UrlRule',
+                    'pluralize'  => false,
+                    'controller' => 'auth/sign-up'
+                ],
             ],
         ],
     ],

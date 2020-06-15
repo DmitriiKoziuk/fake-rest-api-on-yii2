@@ -8,6 +8,8 @@ use DmitriiKoziuk\FakeRestApiModules\Auth\forms\UserLoginForm;
 use DmitriiKoziuk\FakeRestApiModules\Auth\services\UserAuthService;
 use DmitriiKoziuk\FakeRestApiModules\Auth\exceptions\forms\UserLoginFormNotValidException;
 use DmitriiKoziuk\FakeRestApiModules\Auth\exceptions\UserNotFoundException;
+use DmitriiKoziuk\FakeRestApiModules\Auth\exceptions\UserDeletedException;
+use DmitriiKoziuk\FakeRestApiModules\Auth\exceptions\UserInactiveException;
 use DmitriiKoziuk\FakeRestApiModules\Auth\exceptions\UserPasswordIncorrectException;
 
 class SignInController extends Controller
@@ -44,15 +46,17 @@ class SignInController extends Controller
             ) {
                 throw new UserLoginFormNotValidException($userLoginForm->getErrors());
             }
-            $return['data'] = [
-                'apiKey' => $this->userAuthService->signInUser($userLoginForm),
-            ];
+            $return['data'] = $this->userAuthService->signInUser($userLoginForm);
             $return['success'] = true;
             $return['statusMessage'] = 'Ok';
         } catch (UserLoginFormNotValidException $e) {
             $return['statusMessage'] = $e->getMessage();
             $return['data'] = $e->getAttributeErrors();
         } catch (UserNotFoundException $e) {
+            $return['statusMessage'] = $e->getMessage();
+        } catch (UserInactiveException $e) {
+            $return['statusMessage'] = $e->getMessage();
+        } catch (UserDeletedException $e) {
             $return['statusMessage'] = $e->getMessage();
         } catch (UserPasswordIncorrectException $e) {
             $return['statusMessage'] = $e->getMessage();
