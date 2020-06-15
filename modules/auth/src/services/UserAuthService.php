@@ -13,6 +13,7 @@ use DmitriiKoziuk\FakeRestApiModules\Auth\exceptions\UserNotFoundException;
 use DmitriiKoziuk\FakeRestApiModules\Auth\exceptions\UserApiKeySaveException;
 use DmitriiKoziuk\FakeRestApiModules\Auth\exceptions\UserAlreadyExistException;
 use DmitriiKoziuk\FakeRestApiModules\Auth\exceptions\UserInactiveException;
+use DmitriiKoziuk\FakeRestApiModules\Auth\exceptions\UserDeletedException;
 use DmitriiKoziuk\FakeRestApiModules\Auth\exceptions\forms\UserSignUpFormNotValidException;
 
 class UserAuthService
@@ -25,6 +26,7 @@ class UserAuthService
      * @throws UserApiKeySaveException
      * @throws UserNotFoundException
      * @throws UserInactiveException
+     * @throws UserDeletedException
      * @throws UserPasswordIncorrectException
      * @throws \Throwable
      */
@@ -40,6 +42,9 @@ class UserAuthService
         }
         if (User::STATUS_INACTIVE == $user->status) {
             throw new UserInactiveException();
+        }
+        if (User::STATUS_DELETED == $user->status) {
+            throw new UserDeletedException();
         }
         if (! $user->validatePassword($userLoginForm->password)) {
             throw new UserPasswordIncorrectException();

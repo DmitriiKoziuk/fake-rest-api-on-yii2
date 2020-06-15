@@ -77,7 +77,7 @@ class SignInCest
         ]);
     }
 
-    public function tryToSignInInactiveUser(ApiTester $I)
+    public function tryToSignInactiveUser(ApiTester $I)
     {
         $userEntity = $I->grabFixture('users', 'inactive');
         $I->sendPOST(Url::to('/auth/sign-in'), [
@@ -89,6 +89,21 @@ class SignInCest
         $I->seeResponseContainsJson([
             'success' => false,
             'statusMessage' => "User inactive.",
+        ]);
+    }
+
+    public function tryToSignDeletedUser(ApiTester $I)
+    {
+        $userEntity = $I->grabFixture('users', 'deleted');
+        $I->sendPOST(Url::to('/auth/sign-in'), [
+            'username' => $userEntity->username,
+            'password' => 'password_0',
+        ]);
+        $I->seeResponseCodeIs(200);
+        $I->seeResponseIsJson();
+        $I->seeResponseContainsJson([
+            'success' => false,
+            'statusMessage' => "User deleted.",
         ]);
     }
 }

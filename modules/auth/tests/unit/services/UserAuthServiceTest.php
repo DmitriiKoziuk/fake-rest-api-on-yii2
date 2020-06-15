@@ -15,6 +15,7 @@ use DmitriiKoziuk\FakeRestApiModules\Auth\exceptions\UserNotFoundException;
 use DmitriiKoziuk\FakeRestApiModules\Auth\exceptions\UserPasswordIncorrectException;
 use DmitriiKoziuk\FakeRestApiModules\Auth\exceptions\UserAlreadyExistException;
 use DmitriiKoziuk\FakeRestApiModules\Auth\exceptions\UserInactiveException;
+use DmitriiKoziuk\FakeRestApiModules\Auth\exceptions\UserDeletedException;
 use DmitriiKoziuk\FakeRestApiModules\Auth\exceptions\forms\UserSignUpFormNotValidException;
 
 class UserAuthServiceTest extends \Codeception\Test\Unit
@@ -88,6 +89,20 @@ class UserAuthServiceTest extends \Codeception\Test\Unit
         $userEntity = $this->tester->grabFixture('users', 'inactive');
         $this->tester->seeRecord(User::class, ['username' => $userEntity->username]);
         $this->expectException(UserInactiveException::class);
+        $userAuthService->signInUser(new UserLoginForm([
+            'username' => $userEntity->username,
+            'password' => 'password_0',
+        ]));
+    }
+
+    public function testMethodSignInUserThrowErrorForDeletedUser()
+    {
+        /** @var UserAuthService $userAuthService */
+        $userAuthService = Yii::$container->get(UserAuthService::class);
+        /** @var User $userEntity */
+        $userEntity = $this->tester->grabFixture('users', 'deleted');
+        $this->tester->seeRecord(User::class, ['username' => $userEntity->username]);
+        $this->expectException(UserDeletedException::class);
         $userAuthService->signInUser(new UserLoginForm([
             'username' => $userEntity->username,
             'password' => 'password_0',
