@@ -41,4 +41,28 @@ class PostCreateCest
             'body' => $postBody,
         ]);
     }
+
+    public function tryToCreatePostWithoutAnyData(ApiTester $I)
+    {
+        /** @var User $userEntity */
+        $userEntity = $I->grabFixture('users', 0);
+        /** @var UserApiKeyEntity $userApiKeyEntity */
+        $userApiKeyEntity = $I->grabRecord(UserApiKeyEntity::class, ['user_id' => $userEntity->id]);
+
+        $I->amBearerAuthenticated($userApiKeyEntity->api_key);
+        $I->sendPOST(Url::to(['/blog/posts']));
+
+        $I->seeResponseCodeIs(422);
+        $I->seeResponseIsJson();
+        $I->seeResponseContainsJson([
+            [
+                'field' => 'title',
+                'message' => 'Title cannot be blank.',
+            ],
+            [
+                'field' => 'body',
+                'message' => 'Body cannot be blank.',
+            ],
+        ]);
+    }
 }
