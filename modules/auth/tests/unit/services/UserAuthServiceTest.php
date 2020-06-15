@@ -14,6 +14,7 @@ use DmitriiKoziuk\FakeRestApiModules\Auth\services\UserAuthService;
 use DmitriiKoziuk\FakeRestApiModules\Auth\exceptions\UserNotFoundException;
 use DmitriiKoziuk\FakeRestApiModules\Auth\exceptions\UserPasswordIncorrectException;
 use DmitriiKoziuk\FakeRestApiModules\Auth\exceptions\UserAlreadyExistException;
+use DmitriiKoziuk\FakeRestApiModules\Auth\exceptions\UserInactiveException;
 use DmitriiKoziuk\FakeRestApiModules\Auth\exceptions\forms\UserSignUpFormNotValidException;
 
 class UserAuthServiceTest extends \Codeception\Test\Unit
@@ -147,6 +148,20 @@ class UserAuthServiceTest extends \Codeception\Test\Unit
             'user_id' => $createdUserData['userId'],
             'api_key' => $createdUserData['apiKey'],
         ]);
+    }
+
+    public function testMethodSignInUserThrowErrorForInactiveUser()
+    {
+        /** @var UserAuthService $userAuthService */
+        $userAuthService = Yii::$container->get(UserAuthService::class);
+        /** @var User $userEntity */
+        $userEntity = $this->tester->grabFixture('users', 'inactive');
+        $this->tester->seeRecord(User::class, ['username' => $userEntity->username]);
+        $this->expectException(UserInactiveException::class);
+        $userAuthService->signInUser(new UserLoginForm([
+            'username' => $userEntity->username,
+            'password' => 'password_0',
+        ]));
     }
 
     private function makeMethodPublic(object $object, string $method): \ReflectionMethod
