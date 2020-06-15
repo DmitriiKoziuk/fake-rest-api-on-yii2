@@ -31,7 +31,6 @@ class PostRepositoryTest extends \Codeception\Test\Unit
         ]);
         $posts = $postRepository->findPosts($postSearchForm);
         $this->assertIsArray($posts);
-        $this->assertArrayHasKey('currentPage', $posts);
         $this->assertArrayHasKey('totalItems', $posts);
         $this->assertArrayHasKey('results', $posts);
     }
