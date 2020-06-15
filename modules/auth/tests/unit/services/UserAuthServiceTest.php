@@ -77,6 +77,20 @@ class UserAuthServiceTest extends \Codeception\Test\Unit
         $userAuthService->signInUser($userLoginForm);
     }
 
+    public function testMethodSignInUserThrowErrorForInactiveUser()
+    {
+        /** @var UserAuthService $userAuthService */
+        $userAuthService = Yii::$container->get(UserAuthService::class);
+        /** @var User $userEntity */
+        $userEntity = $this->tester->grabFixture('users', 'inactive');
+        $this->tester->seeRecord(User::class, ['username' => $userEntity->username]);
+        $this->expectException(UserInactiveException::class);
+        $userAuthService->signInUser(new UserLoginForm([
+            'username' => $userEntity->username,
+            'password' => 'password_0',
+        ]));
+    }
+
     public function testMethodResetUserApiKeySuccessfulResetAlreadyExistApiKey()
     {
         /** @var User $userEntity */
@@ -148,20 +162,6 @@ class UserAuthServiceTest extends \Codeception\Test\Unit
             'user_id' => $createdUserData['userId'],
             'api_key' => $createdUserData['apiKey'],
         ]);
-    }
-
-    public function testMethodSignInUserThrowErrorForInactiveUser()
-    {
-        /** @var UserAuthService $userAuthService */
-        $userAuthService = Yii::$container->get(UserAuthService::class);
-        /** @var User $userEntity */
-        $userEntity = $this->tester->grabFixture('users', 'inactive');
-        $this->tester->seeRecord(User::class, ['username' => $userEntity->username]);
-        $this->expectException(UserInactiveException::class);
-        $userAuthService->signInUser(new UserLoginForm([
-            'username' => $userEntity->username,
-            'password' => 'password_0',
-        ]));
     }
 
     private function makeMethodPublic(object $object, string $method): \ReflectionMethod
