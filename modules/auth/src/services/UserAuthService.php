@@ -2,7 +2,6 @@
 
 namespace DmitriiKoziuk\FakeRestApiModules\Auth\services;
 
-use DmitriiKoziuk\FakeRestApiModules\Auth\exceptions\UserInactiveException;
 use Yii;
 use yii\base\Exception;
 use DmitriiKoziuk\FakeRestApiModules\Auth\entities\User;
@@ -13,6 +12,7 @@ use DmitriiKoziuk\FakeRestApiModules\Auth\forms\UserSignUpForm;
 use DmitriiKoziuk\FakeRestApiModules\Auth\exceptions\UserNotFoundException;
 use DmitriiKoziuk\FakeRestApiModules\Auth\exceptions\UserApiKeySaveException;
 use DmitriiKoziuk\FakeRestApiModules\Auth\exceptions\UserAlreadyExistException;
+use DmitriiKoziuk\FakeRestApiModules\Auth\exceptions\UserInactiveException;
 use DmitriiKoziuk\FakeRestApiModules\Auth\exceptions\forms\UserSignUpFormNotValidException;
 
 class UserAuthService
@@ -24,6 +24,7 @@ class UserAuthService
      * @throws Exception
      * @throws UserApiKeySaveException
      * @throws UserNotFoundException
+     * @throws UserInactiveException
      * @throws UserPasswordIncorrectException
      * @throws \Throwable
      */
