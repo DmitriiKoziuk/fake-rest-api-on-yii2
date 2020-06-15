@@ -2,6 +2,7 @@
 
 namespace DmitriiKoziuk\FakeRestApiModules\Auth\controllers\backend;
 
+use DmitriiKoziuk\FakeRestApiModules\Auth\exceptions\UserInactiveException;
 use Yii;
 use yii\rest\Controller;
 use DmitriiKoziuk\FakeRestApiModules\Auth\forms\UserLoginForm;
@@ -53,6 +54,8 @@ class SignInController extends Controller
             $return['statusMessage'] = $e->getMessage();
             $return['data'] = $e->getAttributeErrors();
         } catch (UserNotFoundException $e) {
+            $return['statusMessage'] = $e->getMessage();
+        } catch (UserInactiveException $e) {
             $return['statusMessage'] = $e->getMessage();
         } catch (UserPasswordIncorrectException $e) {
             $return['statusMessage'] = $e->getMessage();
