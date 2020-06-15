@@ -2,6 +2,7 @@
 
 namespace DmitriiKoziuk\FakeRestApiModules\Auth\services;
 
+use DmitriiKoziuk\FakeRestApiModules\Auth\exceptions\UserInactiveException;
 use Yii;
 use yii\base\Exception;
 use DmitriiKoziuk\FakeRestApiModules\Auth\entities\User;
@@ -28,9 +29,16 @@ class UserAuthService
      */
     public function signInUser(UserLoginForm $userLoginForm): string
     {
-        $user = User::findByUsername($userLoginForm->username);
+        /** @var User $user */
+        $user = User::find()
+            ->where(['username' => $userLoginForm->username])
+            ->limit(1)
+            ->one();
         if (empty($user)) {
             throw new UserNotFoundException();
+        }
+        if (User::STATUS_INACTIVE == $user->status) {
+            throw new UserInactiveException();
         }
         if (! $user->validatePassword($userLoginForm->password)) {
             throw new UserPasswordIncorrectException();
