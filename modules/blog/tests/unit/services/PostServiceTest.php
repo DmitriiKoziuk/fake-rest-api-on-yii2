@@ -31,7 +31,10 @@ class PostServiceTest extends \Codeception\Test\Unit
     {
         /** @var PostService $postService */
         $postService = Yii::$container->get(PostService::class);
-        $postCreateForm = new PostCreateForm();
+        $postCreateForm = new PostCreateForm([
+            'title' => '',
+            'body' => '',
+        ]);
         $this->expectException(PostCreateFormNotValidException::class);
         $postService->createPost($postCreateForm);
     }
