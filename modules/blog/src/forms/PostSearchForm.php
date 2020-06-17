@@ -8,12 +8,14 @@ class PostSearchForm extends Model
 {
     public ?string $title = null;
     public ?string $body = null;
+    public int     $page = 1;
 
     public function rules()
     {
         return [
             [['title'], 'string', 'max' => 255],
             [['body'], 'string'],
+            [['page'], 'integer'],
         ];
     }
 }

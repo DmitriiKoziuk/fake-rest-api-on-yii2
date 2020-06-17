@@ -14,7 +14,7 @@ class PostSearchFormTest extends \Codeception\Test\Unit
      * @param null|string $body
      * @dataProvider validDataDataProvider
      */
-    public function testWithValidData(?string $title, ?string $body)
+    public function testWithValidData(?string $title, ?string $body, ?int $page)
     {
         $form = new PostSearchForm([
             'title' => $title,
@@ -26,14 +26,16 @@ class PostSearchFormTest extends \Codeception\Test\Unit
     /**
      * @param string $title
      * @param string $body
+     * @param int    $page
      * @param array  $invalidFields
      * @dataProvider notValidDataDataProvider
      */
-    public function testWithNotValidData(string $title, string $body, array $invalidFields)
+    public function testWithNotValidData(string $title, string $body, int $page, array $invalidFields)
     {
         $form = new PostSearchForm([
             'title' => $title,
             'body' => $body,
+            'page' => $page,
         ]);
         $this->assertFalse($form->validate());
         $errors = $form->getErrors();
@@ -54,10 +56,17 @@ class PostSearchFormTest extends \Codeception\Test\Unit
             'Title set' => [
                 'title' => 'post',
                 'body' => null,
+                'page' => null,
             ],
             'Body set' => [
                 'title' => null,
                 'body' => 'post',
+                'page' => null,
+            ],
+            'Page set' => [
+                'title' => null,
+                'body' => null,
+                'page' => 2,
             ],
         ];
     }
@@ -68,9 +77,11 @@ class PostSearchFormTest extends \Codeception\Test\Unit
             'Too long title' => [
                 'title' => str_repeat('t', 256),
                 'body' => '',
+                'page' => 1,
                 'invalidFields' => [
                     'title' => 'Title should contain at most 255 characters.',
                     'body' => '',
+                    'page' => '',
                 ],
             ],
         ];
