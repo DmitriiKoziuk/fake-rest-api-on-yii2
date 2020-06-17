@@ -2,6 +2,7 @@
 
 namespace DmitriiKoziuk\FakeRestApiModules\Blog\tests\api\backend;
 
+use DmitriiKoziuk\FakeRestApiModules\Auth\entities\UserApiKeyEntity;
 use yii\helpers\Url;
 use DmitriiKoziuk\FakeRestApiModules\Blog\tests\ApiTester;
 use DmitriiKoziuk\FakeRestApiModules\Auth\tests\_fixtures\UserApiKeyEntityFixture;
@@ -32,6 +33,27 @@ class PostGetCest
         $I->sendGET(Url::to(['/blog/posts']));
         $I->seeResponseCodeIs(200);
         $I->seeResponseIsJson();
+    }
+
+    public function tryCheckIsResponseDataStructureCorrect(ApiTester $I)
+    {
+        /** @var UserApiKeyEntity $apiKeyEntity */
+        $apiKeyEntity = $I->grabFixture('apiKeys', 0);
+        $bearerToken = $apiKeyEntity->api_key;
+        $I->amBearerAuthenticated($bearerToken);
+        $I->sendGET(Url::to(['/blog/posts']));
+        $I->seeResponseCodeIs(200);
+        $I->seeResponseIsJson();
+        $I->seeResponseMatchesJsonType([
+            'success' => 'boolean',
+            'statusMessage' => 'string',
+            'data' => [
+                'page' => 'integer',
+                'resultsPerPage' => 'integer',
+                'totalItems' => 'string',
+                'results' => 'array',
+            ],
+        ]);
     }
 
     private function getBearerToken()
