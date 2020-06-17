@@ -45,10 +45,14 @@ class PostGetCest
         $I->seeResponseCodeIs(200);
         $I->seeResponseIsJson();
         $I->seeResponseMatchesJsonType([
-            'page' => 'integer',
-            'resultsPerPage' => 'integer',
-            'totalItems' => 'integer',
-            'results' => 'array',
+            'success' => 'boolean',
+            'statusMessage' => 'string',
+            'data' => [
+                'page' => 'integer',
+                'resultsPerPage' => 'integer',
+                'totalItems' => 'integer',
+                'results' => 'array',
+            ],
         ]);
     }
 
