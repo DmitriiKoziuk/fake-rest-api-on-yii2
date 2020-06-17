@@ -2,6 +2,7 @@
 
 namespace DmitriiKoziuk\FakeRestApiModules\Blog\repositories;
 
+use yii\data\ActiveDataProvider;
 use DmitriiKoziuk\FakeRestApiModules\Blog\entities\Post;
 use DmitriiKoziuk\FakeRestApiModules\Blog\forms\PostSearchForm;
 
@@ -11,9 +12,15 @@ class PostRepository
     {
         $q = Post::find()
             ->andFilterWhere(['like', 'title', $postSearchForm->title]);
+        $dataProvider = new ActiveDataProvider([
+            'query' => $q,
+            'pagination' => [
+                'pageSize' => $postSearchForm->resultsPerPage,
+            ],
+        ]);
         return [
             'totalItems' => $q->count(),
-            'results' => $q->all(),
+            'results' => $dataProvider->getModels(),
         ];
     }
 }
