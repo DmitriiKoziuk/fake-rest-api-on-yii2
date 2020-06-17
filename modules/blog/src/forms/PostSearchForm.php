@@ -6,13 +6,12 @@ use yii\base\Model;
 
 class PostSearchForm extends Model
 {
-    public string $title;
-    public string $body;
+    public ?string $title = null;
+    public ?string $body = null;
 
     public function rules()
     {
         return [
-            [['title', 'body'], 'required'],
             [['title'], 'string', 'max' => 255],
             [['body'], 'string'],
         ];

@@ -9,11 +9,16 @@ class PostSearchFormTest extends \Codeception\Test\Unit
 {
     protected UnitTester $tester;
 
-    public function testWithValidData()
+    /**
+     * @param null|string $title
+     * @param null|string $body
+     * @dataProvider validDataDataProvider
+     */
+    public function testWithValidData(?string $title, ?string $body)
     {
         $form = new PostSearchForm([
-            'title' => 't',
-            'body' => 'b',
+            'title' => $title,
+            'body' => $body,
         ]);
         $this->assertTrue($form->validate());
     }
@@ -34,24 +39,32 @@ class PostSearchFormTest extends \Codeception\Test\Unit
         $errors = $form->getErrors();
         $this->assertNotEmpty($errors);
         foreach ($invalidFields as $key => $errorMsg) {
-            $this->assertArrayHasKey($key, $errors);
+            if (! empty($invalidFields[ $key ])) {
+                $this->assertArrayHasKey($key, $errors);
+            }
             if (! empty($errorMsg)) {
                 $this->assertContains($errorMsg, $errors[ $key ]);
             }
         }
     }
 
+    public function validDataDataProvider()
+    {
+        return [
+            'Title set' => [
+                'title' => 'post',
+                'body' => null,
+            ],
+            'Body set' => [
+                'title' => null,
+                'body' => 'post',
+            ],
+        ];
+    }
+
     public function notValidDataDataProvider()
     {
         return [
-            'All fields empty' => [
-                'title' => '',
-                'body' => '',
-                'invalidFields' => [
-                    'title' => 'Title cannot be blank.',
-                    'body' => 'Body cannot be blank.',
-                ],
-            ],
             'Too long title' => [
                 'title' => str_repeat('t', 256),
                 'body' => '',
