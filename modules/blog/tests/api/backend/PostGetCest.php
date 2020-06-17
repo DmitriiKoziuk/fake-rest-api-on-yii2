@@ -50,7 +50,7 @@ class PostGetCest
             'data' => [
                 'page' => 'integer',
                 'resultsPerPage' => 'integer',
-                'totalItems' => 'integer',
+                'totalItems' => 'string',
                 'results' => 'array',
             ],
         ]);
