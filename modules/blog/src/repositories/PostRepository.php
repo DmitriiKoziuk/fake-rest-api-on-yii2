@@ -16,6 +16,7 @@ class PostRepository
             'query' => $q,
             'pagination' => [
                 'pageSize' => $postSearchForm->resultsPerPage,
+                'page' => $postSearchForm->page - 1,
             ],
         ]);
         return [
