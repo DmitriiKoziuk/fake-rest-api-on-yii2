@@ -34,4 +34,20 @@ class PostRepositoryTest extends \Codeception\Test\Unit
         $this->assertArrayHasKey('totalItems', $posts);
         $this->assertArrayHasKey('results', $posts);
     }
+
+    public function testMethodFindPostsReturnCertainAmountOfPosts()
+    {
+        $postsPerPage = 3;
+        /** @var PostRepository $postRepository */
+        $postRepository = Yii::$container->get(PostRepository::class);
+        $postSearchForm = new PostSearchForm([
+            'title' => 'post',
+            'resultsPerPage' => $postsPerPage,
+        ]);
+        $posts = $postRepository->findPosts($postSearchForm);
+        $this->assertIsArray($posts);
+        $this->assertArrayHasKey('results', $posts);
+        $this->assertIsArray($posts['results']);
+        $this->assertCount($postsPerPage, $posts['results']);
+    }
 }
