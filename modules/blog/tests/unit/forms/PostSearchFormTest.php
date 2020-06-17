@@ -14,7 +14,7 @@ class PostSearchFormTest extends \Codeception\Test\Unit
      * @param null|string $body
      * @dataProvider validDataDataProvider
      */
-    public function testWithValidData(?string $title, ?string $body, ?int $page)
+    public function testWithValidData(?string $title, ?string $body)
     {
         $form = new PostSearchForm([
             'title' => $title,
@@ -56,17 +56,14 @@ class PostSearchFormTest extends \Codeception\Test\Unit
             'Title set' => [
                 'title' => 'post',
                 'body' => null,
-                'page' => null,
             ],
             'Body set' => [
                 'title' => null,
                 'body' => 'post',
-                'page' => null,
             ],
             'Page set' => [
                 'title' => null,
                 'body' => null,
-                'page' => 2,
             ],
         ];
     }
