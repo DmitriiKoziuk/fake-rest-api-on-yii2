@@ -12,6 +12,8 @@ use DmitriiKoziuk\FakeRestApiModules\Blog\exceptions\PostSearchFormNotValidExcep
 
 class PostController extends ActiveController
 {
+    public $modelClass = Post::class;
+
     private PostRepository $postRepository;
 
     public function __construct(
@@ -32,8 +34,6 @@ class PostController extends ActiveController
         ];
         return $behaviors;
     }
-
-    public $modelClass = Post::class;
 
     public function actions()
     {
