@@ -19,6 +19,17 @@ class PostCreateCest
         ];
     }
 
+    public function tryToGetAccessWithoutApiToken(ApiTester $I)
+    {
+        $I->sendPOST(Url::to(['/blog/posts']));
+        $I->seeResponseCodeIs(401);
+        $I->seeResponseIsJson();
+        $I->seeResponseContainsJson([
+            'name' => 'Unauthorized',
+            'message' => 'Your request was made with invalid credentials.',
+        ]);
+    }
+
     public function tryToCreateNewPost(ApiTester $I)
     {
         /** @var User $userEntity */
