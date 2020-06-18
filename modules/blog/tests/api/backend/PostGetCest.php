@@ -2,11 +2,11 @@
 
 namespace DmitriiKoziuk\FakeRestApiModules\Blog\tests\api\backend;
 
-use DmitriiKoziuk\FakeRestApiModules\Auth\entities\UserApiKeyEntity;
 use yii\helpers\Url;
 use DmitriiKoziuk\FakeRestApiModules\Blog\tests\ApiTester;
 use DmitriiKoziuk\FakeRestApiModules\Auth\tests\_fixtures\UserApiKeyEntityFixture;
 use DmitriiKoziuk\FakeRestApiModules\Auth\tests\_fixtures\UserEntityFixture;
+use DmitriiKoziuk\FakeRestApiModules\Auth\entities\UserApiKeyEntity;
 use DmitriiKoziuk\FakeRestApiModules\Blog\tests\_fixtures\PostFixture;
 
 class PostGetCest
@@ -16,7 +16,7 @@ class PostGetCest
         return [
             'users' => UserEntityFixture::class,
             'apiKeys' => UserApiKeyEntityFixture::class,
-            'postFixture' => PostFixture::class,
+            'posts' => PostFixture::class,
         ];
     }
 
@@ -33,8 +33,10 @@ class PostGetCest
 
     public function tryGetPostsResourceWithBearerToken(ApiTester $I)
     {
-        $bearerToken = $this->getBearerToken();
-        $I->amBearerAuthenticated($bearerToken);
+        /** @var UserApiKeyEntity $apiKeyEntity */
+        $apiKeyEntity = $I->grabFixture('apiKeys', 0);
+
+        $I->amBearerAuthenticated($apiKeyEntity->api_key);
         $I->sendGET(Url::to(['/blog/posts']));
         $I->seeResponseCodeIs(200);
         $I->seeResponseIsJson();
@@ -59,11 +61,5 @@ class PostGetCest
                 'results' => 'array',
             ],
         ]);
-    }
-
-    private function getBearerToken()
-    {
-        $userApiKeys = include __DIR__ . '/../../../../auth/tests/_fixtures/data/auth_user_api_keys.php';
-        return $userApiKeys[ array_key_first($userApiKeys) ]['api_key'];
     }
 }

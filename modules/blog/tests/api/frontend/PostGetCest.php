@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace DmitriiKoziuk\FakeRestApiModules\Blog\tests\api\frontend;
 
@@ -6,12 +6,12 @@ use yii\helpers\Url;
 use DmitriiKoziuk\FakeRestApiModules\Blog\tests\ApiTester;
 use DmitriiKoziuk\FakeRestApiModules\Blog\tests\_fixtures\PostFixture;
 
-class BlogPostGetCest
+class PostGetCest
 {
     public function _fixtures()
     {
         return [
-            'postFixture' => PostFixture::class,
+            'posts' => PostFixture::class,
         ];
     }
 

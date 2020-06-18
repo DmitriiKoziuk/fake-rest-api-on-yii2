@@ -5,11 +5,20 @@ namespace DmitriiKoziuk\FakeRestApiModules\Blog\repositories;
 use yii\data\ActiveDataProvider;
 use DmitriiKoziuk\FakeRestApiModules\Blog\entities\Post;
 use DmitriiKoziuk\FakeRestApiModules\Blog\forms\PostSearchForm;
+use DmitriiKoziuk\FakeRestApiModules\Blog\exceptions\PostSearchFormNotValidException;
 
 class PostRepository
 {
+    /**
+     * @param PostSearchForm $postSearchForm
+     * @return array
+     * @throws PostSearchFormNotValidException
+     */
     public function findPosts(PostSearchForm $postSearchForm): array
     {
+        if (! $postSearchForm->validate()) {
+            throw new PostSearchFormNotValidException();
+        }
         $q = Post::find()
             ->andFilterWhere(['like', 'title', $postSearchForm->title]);
         $dataProvider = new ActiveDataProvider([
