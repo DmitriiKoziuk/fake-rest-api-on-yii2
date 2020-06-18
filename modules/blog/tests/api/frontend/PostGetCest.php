@@ -6,7 +6,7 @@ use yii\helpers\Url;
 use DmitriiKoziuk\FakeRestApiModules\Blog\tests\ApiTester;
 use DmitriiKoziuk\FakeRestApiModules\Blog\tests\_fixtures\PostFixture;
 
-class BlogPostGetCest
+class PostGetCest
 {
     public function _fixtures()
     {
