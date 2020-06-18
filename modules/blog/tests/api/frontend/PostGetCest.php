@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace DmitriiKoziuk\FakeRestApiModules\Blog\tests\api\frontend;
 
@@ -11,7 +11,7 @@ class PostGetCest
     public function _fixtures()
     {
         return [
-            'postFixture' => PostFixture::class,
+            'posts' => PostFixture::class,
         ];
     }
 
