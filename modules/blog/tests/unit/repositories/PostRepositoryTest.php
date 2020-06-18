@@ -2,11 +2,12 @@
 
 namespace DmitriiKoziuk\FakeRestApiModules\Blog\tests\unit\repositories;
 
-use DmitriiKoziuk\FakeRestApiModules\Blog\entities\Post;
+use DmitriiKoziuk\FakeRestApiModules\Blog\exceptions\PostSearchFormNotValidException;
 use Yii;
 use DmitriiKoziuk\FakeRestApiModules\Blog\tests\UnitTester;
 use DmitriiKoziuk\FakeRestApiModules\Blog\tests\_fixtures\PostFixture;
 use DmitriiKoziuk\FakeRestApiModules\Blog\forms\PostSearchForm;
+use DmitriiKoziuk\FakeRestApiModules\Blog\entities\Post;
 use DmitriiKoziuk\FakeRestApiModules\Blog\repositories\PostRepository;
 
 class PostRepositoryTest extends \Codeception\Test\Unit
@@ -50,6 +51,18 @@ class PostRepositoryTest extends \Codeception\Test\Unit
         $this->assertArrayHasKey('results', $posts);
         $this->assertIsArray($posts['results']);
         $this->assertCount($postsPerPage, $posts['results']);
+    }
+
+    public function testMethodFindPostsThrowExceptionIfPostSearchFormNotValid()
+    {
+        /** @var PostRepository $postRepository */
+        $postRepository = Yii::$container->get(PostRepository::class);
+        $postSearchForm = new PostSearchForm([
+            'title' => str_repeat('p', 300),
+        ]);
+
+        $this->expectException(PostSearchFormNotValidException::class);
+        $postRepository->findPosts($postSearchForm);
     }
 
     /**
