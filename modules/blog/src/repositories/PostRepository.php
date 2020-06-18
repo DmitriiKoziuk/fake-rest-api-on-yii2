@@ -24,4 +24,11 @@ class PostRepository
             'results' => $dataProvider->getModels(),
         ];
     }
+
+    public function findPostById(int $id): ?Post
+    {
+        /** @var Post|null $post */
+        $post = Post::find()->where(['id' => $id])->one();
+        return $post;
+    }
 }
