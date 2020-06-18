@@ -5,12 +5,12 @@ namespace DmitriiKoziuk\FakeRestApiModules\Blog\controllers\backend;
 use yii\rest\ActiveController;
 use yii\filters\auth\HttpBearerAuth;
 use DmitriiKoziuk\FakeRestApiModules\Blog\controllers\actions\PostIndexAction;
-use DmitriiKoziuk\FakeRestApiModules\Blog\entities\Post;
+use DmitriiKoziuk\FakeRestApiModules\Blog\entities\PostEntity;
 use DmitriiKoziuk\FakeRestApiModules\Blog\controllers\actions\PostViewAction;
 
 class PostController extends ActiveController
 {
-    public $modelClass = Post::class;
+    public $modelClass = PostEntity::class;
 
     public function behaviors()
     {

@@ -8,7 +8,7 @@ use DmitriiKoziuk\FakeRestApiModules\Auth\tests\_fixtures\UserApiKeyEntityFixtur
 use DmitriiKoziuk\FakeRestApiModules\Auth\tests\_fixtures\UserEntityFixture;
 use DmitriiKoziuk\FakeRestApiModules\Auth\entities\UserApiKeyEntity;
 use DmitriiKoziuk\FakeRestApiModules\Blog\tests\_fixtures\PostFixture;
-use DmitriiKoziuk\FakeRestApiModules\Blog\entities\Post;
+use DmitriiKoziuk\FakeRestApiModules\Blog\entities\PostEntity;
 use DmitriiKoziuk\FakeRestApiModules\Blog\exceptions\PostNotFoundException;
 
 class PostViewCest
@@ -24,7 +24,7 @@ class PostViewCest
 
     public function tryToGetAccessWithoutApiToken(ApiTester $I)
     {
-        /** @var Post $postEntity */
+        /** @var PostEntity $postEntity */
         $postEntity = $I->grabFixture('posts', 0);
         $url = '/blog/posts/' . $postEntity->id;
 
@@ -39,13 +39,13 @@ class PostViewCest
 
     public function tryToCheckResponseStructureForExistPost(ApiTester $I)
     {
-        /** @var Post $postEntity */
+        /** @var PostEntity $postEntity */
         $postEntity = $I->grabFixture('posts', 0);
         /** @var UserApiKeyEntity $apiKeyEntity */
         $apiKeyEntity = $I->grabFixture('apiKeys', 0);
         $url = '/blog/posts/' . $postEntity->id;
 
-        $I->seeRecord(Post::class, ['id' => $postEntity->id]);
+        $I->seeRecord(PostEntity::class, ['id' => $postEntity->id]);
         $I->amBearerAuthenticated($apiKeyEntity->api_key);
         $I->sendGET(Url::to([$url]));
         $I->seeResponseCodeIs(200);
@@ -63,13 +63,13 @@ class PostViewCest
 
     public function tryToCheckResponseStructureForNotExistPost(ApiTester $I)
     {
-        /** @var Post $postEntity */
+        /** @var PostEntity $postEntity */
         $postEntity = $I->grabFixture('posts', 0);
         /** @var UserApiKeyEntity $apiKeyEntity */
         $apiKeyEntity = $I->grabFixture('apiKeys', 0);
         $url = '/blog/posts/' . $postEntity->id;
 
-        $I->seeRecord(Post::class, ['id' => $postEntity->id]);
+        $I->seeRecord(PostEntity::class, ['id' => $postEntity->id]);
         $I->amBearerAuthenticated($apiKeyEntity->api_key);
         $I->sendGET(Url::to([$url]));
         $I->seeResponseCodeIs(200);
@@ -83,13 +83,13 @@ class PostViewCest
 
     public function tryToGetExistPost(ApiTester $I)
     {
-        /** @var Post $postEntity */
+        /** @var PostEntity $postEntity */
         $postEntity = $I->grabFixture('posts', 0);
         /** @var UserApiKeyEntity $apiKeyEntity */
         $apiKeyEntity = $I->grabFixture('apiKeys', 0);
         $url = '/blog/posts/' . $postEntity->id;
 
-        $I->seeRecord(Post::class, ['id' => $postEntity->id]);
+        $I->seeRecord(PostEntity::class, ['id' => $postEntity->id]);
         $I->amBearerAuthenticated($apiKeyEntity->api_key);
         $I->sendGET(Url::to([$url]));
         $I->seeResponseCodeIs(200);
@@ -113,7 +113,7 @@ class PostViewCest
         /** @var UserApiKeyEntity $apiKeyEntity */
         $apiKeyEntity = $I->grabFixture('apiKeys', 0);
 
-        $I->dontSeeRecord(Post::class, ['id' => $notExistPostId]);
+        $I->dontSeeRecord(PostEntity::class, ['id' => $notExistPostId]);
         $I->amBearerAuthenticated($apiKeyEntity->api_key);
         $I->sendGET(Url::to([$url]));
         $I->seeResponseCodeIs(200);

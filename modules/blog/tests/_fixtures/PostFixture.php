@@ -3,9 +3,9 @@
 namespace DmitriiKoziuk\FakeRestApiModules\Blog\tests\_fixtures;
 
 use yii\test\ActiveFixture;
-use DmitriiKoziuk\FakeRestApiModules\Blog\entities\Post;
+use DmitriiKoziuk\FakeRestApiModules\Blog\entities\PostEntity;
 
 class PostFixture extends ActiveFixture
 {
-    public $modelClass = Post::class;
+    public $modelClass = PostEntity::class;
 }

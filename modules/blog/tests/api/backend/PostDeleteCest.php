@@ -8,7 +8,7 @@ use DmitriiKoziuk\FakeRestApiModules\Auth\tests\_fixtures\UserApiKeyEntityFixtur
 use DmitriiKoziuk\FakeRestApiModules\Auth\tests\_fixtures\UserEntityFixture;
 use DmitriiKoziuk\FakeRestApiModules\Auth\entities\UserApiKeyEntity;
 use DmitriiKoziuk\FakeRestApiModules\Blog\tests\_fixtures\PostFixture;
-use DmitriiKoziuk\FakeRestApiModules\Blog\entities\Post;
+use DmitriiKoziuk\FakeRestApiModules\Blog\entities\PostEntity;
 
 class PostDeleteCest
 {
@@ -23,7 +23,7 @@ class PostDeleteCest
 
     public function tryToGetAccessWithoutApiToken(ApiTester $I)
     {
-        /** @var Post $postEntity */
+        /** @var PostEntity $postEntity */
         $postEntity = $I->grabFixture('posts', 0);
         $url = '/blog/posts/' . $postEntity->id;
 
@@ -38,7 +38,7 @@ class PostDeleteCest
 
     public function tryToDeletePost(ApiTester $I)
     {
-        /** @var Post $postEntity */
+        /** @var PostEntity $postEntity */
         $postEntity = $I->grabFixture('posts', 0);
         /** @var UserApiKeyEntity $apiKeyEntity */
         $apiKeyEntity = $I->grabFixture('apiKeys', 0);

@@ -5,7 +5,7 @@ namespace DmitriiKoziuk\FakeRestApiModules\Blog\tests\api\frontend;
 use yii\helpers\Url;
 use DmitriiKoziuk\FakeRestApiModules\Blog\tests\ApiTester;
 use DmitriiKoziuk\FakeRestApiModules\Blog\tests\_fixtures\PostFixture;
-use DmitriiKoziuk\FakeRestApiModules\Blog\entities\Post;
+use DmitriiKoziuk\FakeRestApiModules\Blog\entities\PostEntity;
 use DmitriiKoziuk\FakeRestApiModules\Blog\exceptions\PostNotFoundException;
 
 class PostViewCest
@@ -19,11 +19,11 @@ class PostViewCest
 
     public function tryToCheckResponseStructureForExistPost(ApiTester $I)
     {
-        /** @var Post $postEntity */
+        /** @var PostEntity $postEntity */
         $postEntity = $I->grabFixture('posts', 0);
         $url = '/blog/posts/' . $postEntity->id;
 
-        $I->seeRecord(Post::class, ['id' => $postEntity->id]);
+        $I->seeRecord(PostEntity::class, ['id' => $postEntity->id]);
         $I->sendGET(Url::to([$url]));
         $I->seeResponseCodeIs(200);
         $I->seeResponseIsJson();
@@ -40,11 +40,11 @@ class PostViewCest
 
     public function tryToCheckResponseStructureForNotExistPost(ApiTester $I)
     {
-        /** @var Post $postEntity */
+        /** @var PostEntity $postEntity */
         $postEntity = $I->grabFixture('posts', 0);
         $url = '/blog/posts/' . $postEntity->id;
 
-        $I->seeRecord(Post::class, ['id' => $postEntity->id]);
+        $I->seeRecord(PostEntity::class, ['id' => $postEntity->id]);
         $I->sendGET(Url::to([$url]));
         $I->seeResponseCodeIs(200);
         $I->seeResponseIsJson();
@@ -57,11 +57,11 @@ class PostViewCest
 
     public function tryToGetExistPost(ApiTester $I)
     {
-        /** @var Post $postEntity */
+        /** @var PostEntity $postEntity */
         $postEntity = $I->grabFixture('posts', 0);
         $url = '/blog/posts/' . $postEntity->id;
 
-        $I->seeRecord(Post::class, ['id' => $postEntity->id]);
+        $I->seeRecord(PostEntity::class, ['id' => $postEntity->id]);
         $I->sendGET(Url::to([$url]));
         $I->seeResponseCodeIs(200);
         $I->seeResponseIsJson();
@@ -82,7 +82,7 @@ class PostViewCest
         $url = '/blog/posts/' . $notExistPostId;
         $statusMessage = (new PostNotFoundException())->getMessage();
 
-        $I->dontSeeRecord(Post::class, ['id' => $notExistPostId]);
+        $I->dontSeeRecord(PostEntity::class, ['id' => $notExistPostId]);
         $I->sendGET(Url::to([$url]));
         $I->seeResponseCodeIs(200);
         $I->seeResponseIsJson();

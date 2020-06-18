@@ -2,8 +2,8 @@
 
 namespace DmitriiKoziuk\FakeRestApiModules\Blog\services;
 
-use DmitriiKoziuk\FakeRestApiModules\Blog\entities\Post;
 use DmitriiKoziuk\FakeRestApiModules\Blog\forms\PostCreateForm;
+use DmitriiKoziuk\FakeRestApiModules\Blog\entities\PostEntity;
 use DmitriiKoziuk\FakeRestApiModules\Blog\exceptions\PostCreateFormNotValidException;
 
 class PostService
@@ -13,11 +13,11 @@ class PostService
         if (! $postCreateForm->validate()) {
             throw new PostCreateFormNotValidException();
         }
-        $newPost = new Post([
+        $newPostEntity = new PostEntity([
             'title' => $postCreateForm->title,
             'body' => $postCreateForm->body,
         ]);
-        $newPost->save();
-        return $newPost->getAttributes();
+        $newPostEntity->save();
+        return $newPostEntity->getAttributes();
     }
 }

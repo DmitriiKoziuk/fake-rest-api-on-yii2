@@ -2,13 +2,15 @@
 
 namespace DmitriiKoziuk\FakeRestApiModules\Blog\tests\unit\repositories;
 
-use DmitriiKoziuk\FakeRestApiModules\Blog\exceptions\PostSearchFormNotValidException;
 use Yii;
+use yii\di\NotInstantiableException;
+use yii\base\InvalidConfigException;
 use DmitriiKoziuk\FakeRestApiModules\Blog\tests\UnitTester;
 use DmitriiKoziuk\FakeRestApiModules\Blog\tests\_fixtures\PostFixture;
 use DmitriiKoziuk\FakeRestApiModules\Blog\forms\PostSearchForm;
-use DmitriiKoziuk\FakeRestApiModules\Blog\entities\Post;
+use DmitriiKoziuk\FakeRestApiModules\Blog\entities\PostEntity;
 use DmitriiKoziuk\FakeRestApiModules\Blog\repositories\PostRepository;
+use DmitriiKoziuk\FakeRestApiModules\Blog\exceptions\PostSearchFormNotValidException;
 
 class PostRepositoryTest extends \Codeception\Test\Unit
 {
@@ -70,8 +72,8 @@ class PostRepositoryTest extends \Codeception\Test\Unit
      * @param int $resultsPerPage
      * @param array $postsIds
      * @param int $pageSize
-     * @throws \yii\base\InvalidConfigException
-     * @throws \yii\di\NotInstantiableException
+     * @throws InvalidConfigException|NotInstantiableException
+     * @throws PostSearchFormNotValidException
      * @dataProvider postsDataProvider
      */
     public function testMethodFindPostsPaginationWork(int $page, int $resultsPerPage, array $postsIds, int $pageSize)
@@ -96,10 +98,10 @@ class PostRepositoryTest extends \Codeception\Test\Unit
     {
         /** @var PostRepository $postRepository */
         $postRepository = Yii::$container->get(PostRepository::class);
-        /** @var Post $searchedPostEntity */
+        /** @var PostEntity $searchedPostEntity */
         $searchedPostEntity = $this->tester->grabFixture('posts', 0);
 
-        $this->tester->seeRecord(Post::class, ['id' => $searchedPostEntity->id]);
+        $this->tester->seeRecord(PostEntity::class, ['id' => $searchedPostEntity->id]);
         $foundPost = $postRepository->findPostById($searchedPostEntity->id);
         $this->assertEquals($searchedPostEntity->id, $foundPost->id);
     }
@@ -110,7 +112,7 @@ class PostRepositoryTest extends \Codeception\Test\Unit
         /** @var PostRepository $postRepository */
         $postRepository = Yii::$container->get(PostRepository::class);
 
-        $this->tester->dontSeeRecord(Post::class, ['id' => $searchedPostId]);
+        $this->tester->dontSeeRecord(PostEntity::class, ['id' => $searchedPostId]);
         $foundPost = $postRepository->findPostById($searchedPostId);
         $this->assertEmpty($foundPost);
     }
