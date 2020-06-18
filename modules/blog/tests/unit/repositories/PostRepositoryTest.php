@@ -2,6 +2,7 @@
 
 namespace DmitriiKoziuk\FakeRestApiModules\Blog\tests\unit\repositories;
 
+use DmitriiKoziuk\FakeRestApiModules\Blog\entities\Post;
 use Yii;
 use DmitriiKoziuk\FakeRestApiModules\Blog\tests\UnitTester;
 use DmitriiKoziuk\FakeRestApiModules\Blog\tests\_fixtures\PostFixture;
@@ -76,6 +77,29 @@ class PostRepositoryTest extends \Codeception\Test\Unit
         $this->assertIsArray($posts['results']);
         $this->assertCount($pageSize, $posts['results']);
         $this->assertEmpty(array_diff($postsIds, $foundPostsIds));
+    }
+
+    public function testFindPostByIdMethodReturnExistPost()
+    {
+        /** @var PostRepository $postRepository */
+        $postRepository = Yii::$container->get(PostRepository::class);
+        /** @var Post $searchedPostEntity */
+        $searchedPostEntity = $this->tester->grabFixture('posts', 0);
+
+        $this->tester->seeRecord(Post::class, ['id' => $searchedPostEntity->id]);
+        $foundPost = $postRepository->findPostById($searchedPostEntity->id);
+        $this->assertEquals($searchedPostEntity->id, $foundPost->id);
+    }
+
+    public function testFindPostByIdMethodReturnNullIfPostNotExist()
+    {
+        $searchedPostId = 9999;
+        /** @var PostRepository $postRepository */
+        $postRepository = Yii::$container->get(PostRepository::class);
+
+        $this->tester->dontSeeRecord(Post::class, ['id' => $searchedPostId]);
+        $foundPost = $postRepository->findPostById($searchedPostId);
+        $this->assertEmpty($foundPost);
     }
 
     public function postsDataProvider()
