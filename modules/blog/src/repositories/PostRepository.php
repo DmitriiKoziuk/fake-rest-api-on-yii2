@@ -3,7 +3,7 @@
 namespace DmitriiKoziuk\FakeRestApiModules\Blog\repositories;
 
 use yii\data\ActiveDataProvider;
-use DmitriiKoziuk\FakeRestApiModules\Blog\entities\Post;
+use DmitriiKoziuk\FakeRestApiModules\Blog\entities\PostEntity;
 use DmitriiKoziuk\FakeRestApiModules\Blog\forms\PostSearchForm;
 use DmitriiKoziuk\FakeRestApiModules\Blog\exceptions\PostSearchFormNotValidException;
 
@@ -19,7 +19,7 @@ class PostRepository
         if (! $postSearchForm->validate()) {
             throw new PostSearchFormNotValidException();
         }
-        $q = Post::find()
+        $q = PostEntity::find()
             ->andFilterWhere(['like', 'title', $postSearchForm->title]);
         $dataProvider = new ActiveDataProvider([
             'query' => $q,
@@ -34,10 +34,10 @@ class PostRepository
         ];
     }
 
-    public function findPostById(int $id): ?Post
+    public function findPostById(int $id): ?PostEntity
     {
-        /** @var Post|null $post */
-        $post = Post::find()->where(['id' => $id])->one();
-        return $post;
+        /** @var PostEntity|null $postEntity */
+        $postEntity = PostEntity::find()->where(['id' => $id])->one();
+        return $postEntity;
     }
 }

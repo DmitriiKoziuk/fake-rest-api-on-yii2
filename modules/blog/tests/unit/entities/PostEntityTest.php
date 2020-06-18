@@ -3,7 +3,7 @@
 namespace DmitriiKoziuk\FakeRestApiModules\Blog\tests\unit\entities;
 
 use DmitriiKoziuk\FakeRestApiModules\Blog\tests\UnitTester;
-use DmitriiKoziuk\FakeRestApiModules\Blog\entities\Post;
+use DmitriiKoziuk\FakeRestApiModules\Blog\entities\PostEntity;
 
 class PostEntityTest extends \Codeception\Test\Unit
 {
@@ -14,7 +14,7 @@ class PostEntityTest extends \Codeception\Test\Unit
 
     public function testWithValidData()
     {
-        $entity = new Post([
+        $entity = new PostEntity([
             'title' => 't',
             'body' => 'b',
         ]);
@@ -29,12 +29,12 @@ class PostEntityTest extends \Codeception\Test\Unit
      */
     public function testWithNotValidData(string $title, string $body, array $invalidFields)
     {
-        $form = new Post([
+        $entity = new PostEntity([
             'title' => $title,
             'body' => $body,
         ]);
-        $this->assertFalse($form->validate());
-        $errors = $form->getErrors();
+        $this->assertFalse($entity->validate());
+        $errors = $entity->getErrors();
         $this->assertNotEmpty($errors);
         foreach ($invalidFields as $key => $errorMsg) {
             $this->assertArrayHasKey($key, $errors);

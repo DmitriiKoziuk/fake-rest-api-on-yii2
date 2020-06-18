@@ -11,7 +11,7 @@ use Yii;
  * @property string $title
  * @property string $body
  */
-class Post extends \yii\db\ActiveRecord
+class PostEntity extends \yii\db\ActiveRecord
 {
     /**
      * {@inheritdoc}
