@@ -21,6 +21,21 @@ class PostDeleteCest
         ];
     }
 
+    public function tryToGetAccessWithoutApiToken(ApiTester $I)
+    {
+        /** @var Post $postEntity */
+        $postEntity = $I->grabFixture('posts', 0);
+        $url = '/blog/posts/' . $postEntity->id;
+
+        $I->sendDELETE(Url::to([$url]));
+        $I->seeResponseCodeIs(401);
+        $I->seeResponseIsJson();
+        $I->seeResponseContainsJson([
+            'name' => 'Unauthorized',
+            'message' => 'Your request was made with invalid credentials.',
+        ]);
+    }
+
     public function tryToDeletePost(ApiTester $I)
     {
         /** @var Post $postEntity */
