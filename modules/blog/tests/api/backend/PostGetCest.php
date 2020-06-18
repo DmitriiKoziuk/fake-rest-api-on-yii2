@@ -20,10 +20,15 @@ class PostGetCest
         ];
     }
 
-    public function tryGetPostsResourceWithoutBearerToken(ApiTester $I)
+    public function tryToGetAccessWithoutApiToken(ApiTester $I)
     {
         $I->sendGET(Url::to(['/blog/posts']));
         $I->seeResponseCodeIs(401);
+        $I->seeResponseIsJson();
+        $I->seeResponseContainsJson([
+            'name' => 'Unauthorized',
+            'message' => 'Your request was made with invalid credentials.',
+        ]);
     }
 
     public function tryGetPostsResourceWithBearerToken(ApiTester $I)
