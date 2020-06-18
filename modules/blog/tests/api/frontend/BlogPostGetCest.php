@@ -21,4 +21,21 @@ class BlogPostGetCest
         $I->seeResponseCodeIs(200);
         $I->seeResponseIsJson();
     }
+
+    public function tryCheckIsResponseDataStructureCorrect(ApiTester $I)
+    {
+        $I->sendGET(Url::to(['/blog/posts']));
+        $I->seeResponseCodeIs(200);
+        $I->seeResponseIsJson();
+        $I->seeResponseMatchesJsonType([
+            'success' => 'boolean',
+            'statusMessage' => 'string',
+            'data' => [
+                'page' => 'integer',
+                'resultsPerPage' => 'integer',
+                'totalItems' => 'string',
+                'results' => 'array',
+            ],
+        ]);
+    }
 }
