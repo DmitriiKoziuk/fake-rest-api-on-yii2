@@ -5,6 +5,8 @@ namespace DmitriiKoziuk\FakeRestApiModules\Blog\forms;
 class PostUpdateForm extends PostCreateForm
 {
     public ?int $id = null;
+    public string $title = '';
+    public string $body = '';
 
     public function rules()
     {
