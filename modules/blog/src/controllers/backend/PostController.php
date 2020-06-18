@@ -6,6 +6,7 @@ use yii\rest\ActiveController;
 use yii\filters\auth\HttpBearerAuth;
 use DmitriiKoziuk\FakeRestApiModules\Blog\controllers\actions\PostIndexAction;
 use DmitriiKoziuk\FakeRestApiModules\Blog\entities\Post;
+use DmitriiKoziuk\FakeRestApiModules\Blog\controllers\actions\PostViewAction;
 
 class PostController extends ActiveController
 {
@@ -25,6 +26,9 @@ class PostController extends ActiveController
         $actions = parent::actions();
         $actions['index'] = [
             'class' => PostIndexAction::class,
+        ];
+        $actions['view'] = [
+            'class' => PostViewAction::class,
         ];
         return $actions;
     }

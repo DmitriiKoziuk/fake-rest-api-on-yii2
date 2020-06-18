@@ -4,6 +4,7 @@ namespace DmitriiKoziuk\FakeRestApiModules\Blog\controllers\frontend;
 
 use yii\rest\Controller;
 use DmitriiKoziuk\FakeRestApiModules\Blog\controllers\actions\PostIndexAction;
+use DmitriiKoziuk\FakeRestApiModules\Blog\controllers\actions\PostViewAction;
 
 class PostController extends Controller
 {
@@ -12,6 +13,9 @@ class PostController extends Controller
         return [
             'index' => [
                 'class' => PostIndexAction::class,
+            ],
+            'view' => [
+                'class' => PostViewAction::class,
             ],
         ];
     }
