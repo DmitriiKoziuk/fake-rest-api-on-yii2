@@ -3,10 +3,21 @@ modules:
     enabled:
         - Asserts
         - \DmitriiKoziuk\FakeRestApiModules\Auth\tests\Helper\Api
-        - REST:
-              url: http://localhost:8001/
-              depends: PhpBrowser
-              part: Json
         - Yii2:
             part: [orm, fixtures]
             transaction: false
+env:
+    frontend:
+        modules:
+            enabled:
+                - REST:
+                      url: http://localhost:8001/
+                      depends: PhpBrowser
+                      part: Json
+    backend:
+        modules:
+            enabled:
+                - REST:
+                      url: http://localhost:8002/
+                      depends: PhpBrowser
+                      part: Json
