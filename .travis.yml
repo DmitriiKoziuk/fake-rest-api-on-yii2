@@ -38,19 +38,16 @@ jobs:
     - name: Auth module api backend test
       script:
         - cd ./modules/auth
-        - pwd
-        - php ../../vendor/bin/codecept run api --env backend ./tests/api/backend/
+        - php ../../vendor/bin/codecept run api --env backend tests/api/backend/
     - name: Blog module unit test
       script:
         - cd ./modules/blog
         - php ../../vendor/bin/codecept run unit
     - name: Blog module api frontend test
       script:
-        - cd ./modules/auth
-        - pwd
-        - php ../../vendor/bin/codecept run api --env frontend ./tests/api/frontend/
+        - cd ./modules/blog
+        - php ../../vendor/bin/codecept run api --env frontend tests/api/frontend/
     - name: Blog module api backend test
       script:
-        - cd ./modules/auth
-        - pwd
+        - cd ./modules/blog
         - php ../../vendor/bin/codecept run api --env backend tests/api/backend/
