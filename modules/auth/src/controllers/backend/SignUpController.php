@@ -4,6 +4,7 @@ namespace DmitriiKoziuk\FakeRestApiModules\Auth\controllers\backend;
 
 use Yii;
 use yii\rest\Controller;
+use DmitriiKoziuk\FakeRestApiModules\Base\exceptions\InternalApplicationErrorException;
 use DmitriiKoziuk\FakeRestApiModules\Auth\forms\UserSignUpForm;
 use DmitriiKoziuk\FakeRestApiModules\Auth\exceptions\forms\UserSignUpFormNotValidException;
 use DmitriiKoziuk\FakeRestApiModules\Auth\services\UserAuthService;
@@ -45,7 +46,10 @@ class SignUpController extends Controller
         } catch (UserAlreadyExistException $e) {
             $response['statusMessage'] = $e->getMessage();
         } catch (\Throwable $e) {
-            $response['statusMessage'] = 'Internal application error.';
+            $ex = new InternalApplicationErrorException();
+            $return['statusMessage'] = $ex->getMessage();
+            Yii::$app->response->statusCode = $ex->statusCode;
+            Yii::error($e);
         }
         return $response;
     }

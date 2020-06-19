@@ -4,6 +4,7 @@ namespace DmitriiKoziuk\FakeRestApiModules\Auth\controllers\backend;
 
 use Yii;
 use yii\rest\Controller;
+use DmitriiKoziuk\FakeRestApiModules\Base\exceptions\InternalApplicationErrorException;
 use DmitriiKoziuk\FakeRestApiModules\Auth\forms\UserLoginForm;
 use DmitriiKoziuk\FakeRestApiModules\Auth\services\UserAuthService;
 use DmitriiKoziuk\FakeRestApiModules\Auth\exceptions\forms\UserLoginFormNotValidException;
@@ -61,7 +62,10 @@ class SignInController extends Controller
         } catch (UserPasswordIncorrectException $e) {
             $return['statusMessage'] = $e->getMessage();
         } catch (\Throwable $e) {
-            $return['statusMessage'] = 'Internal application error.';
+            $ex = new InternalApplicationErrorException();
+            $return['statusMessage'] = $ex->getMessage();
+            Yii::$app->response->statusCode = $ex->statusCode;
+            Yii::error($e);
         }
         return $return;
     }
