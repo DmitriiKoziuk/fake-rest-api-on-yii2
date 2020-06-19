@@ -1,0 +1,33 @@
+language: php
+php:
+  - 7.4
+
+cache:
+  directories:
+    - vendor
+    - $HOME/.composer/cache
+
+before_install:
+  - sudo apt-get update
+
+before_script:
+  - composer install
+  - php -m
+  - printf "\n" | pecl install -f imagick-3.4.4
+  - echo "extension = redis.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
+  - php -m
+
+jobs:
+  include:
+    - name: Base module unit test
+      script:
+        - cd ./modules/base
+        - php ../../vendor/bin/codecept run unit
+    - name: Auth module unit test
+      script:
+        - cd ./modules/auth
+        - php ../../vendor/bin/codecept run unit
+    - name: Blog module unit test
+        script:
+          - cd ./modules/blog
+          - php ../../vendor/bin/codecept run unit
