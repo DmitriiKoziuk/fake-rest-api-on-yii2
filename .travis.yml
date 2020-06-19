@@ -2,6 +2,9 @@ language: php
 php:
   - 7.4
 
+services:
+  - mysql
+
 cache:
   directories:
     - vendor
@@ -9,13 +12,16 @@ cache:
 
 before_install:
   - sudo apt-get update
+  - mysql -e 'CREATE DATABASE yii2advanced_test;'
 
 before_script:
-  - composer install
   - php -m
   - printf "\n" | pecl install -f imagick-3.4.4
   - echo "extension = redis.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
   - php -m
+  - composer install
+  - php init --env=Development --overwrite=All
+  - php yii_test migrate --interactive=0
 
 jobs:
   include:
