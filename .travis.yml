@@ -22,6 +22,8 @@ before_script:
   - composer install
   - php init --env=Development --overwrite=All
   - php yii_test migrate --interactive=0
+  - php -S localhost:8001 -t $TRAVIS_BUILD_DIR/frontend/web/ $TRAVIS_BUILD_DIR/frontend/web/index-test.php &
+  - php -S localhost:8002 -t $TRAVIS_BUILD_DIR/backend/web/ $TRAVIS_BUILD_DIR/backend/web/index-test.php &
 
 jobs:
   include:
@@ -33,7 +35,19 @@ jobs:
       script:
         - cd ./modules/auth
         - php ../../vendor/bin/codecept run unit
+    - name: Auth module api backend test
+      script:
+        - cd ./modules/auth
+        - php ../../vendor/bin/codecept run api --env backend tests/api/backend/
     - name: Blog module unit test
       script:
         - cd ./modules/blog
         - php ../../vendor/bin/codecept run unit
+    - name: Blog module api frontend test
+      script:
+        - cd ./modules/blog
+        - php ../../vendor/bin/codecept run api --env frontend tests/api/frontend/
+    - name: Blog module api backend test
+      script:
+        - cd ./modules/blog
+        - php ../../vendor/bin/codecept run api --env backend tests/api/backend/
