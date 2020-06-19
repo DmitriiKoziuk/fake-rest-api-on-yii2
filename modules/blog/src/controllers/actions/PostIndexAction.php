@@ -4,6 +4,7 @@ namespace DmitriiKoziuk\FakeRestApiModules\Blog\controllers\actions;
 
 use Yii;
 use yii\base\Action;
+use DmitriiKoziuk\FakeRestApiModules\Base\exceptions\InternalApplicationErrorException;
 use DmitriiKoziuk\FakeRestApiModules\Blog\forms\PostSearchForm;
 use DmitriiKoziuk\FakeRestApiModules\Blog\repositories\PostRepository;
 use DmitriiKoziuk\FakeRestApiModules\Blog\exceptions\PostSearchFormNotValidException;
@@ -45,7 +46,10 @@ class PostIndexAction extends Action
         } catch (PostSearchFormNotValidException $e) {
             $return['statusMessage'] = $e->getMessage();
         } catch (\Throwable $e) {
-            $return['statusMessage'] = 'Internal application error.';
+            $ex = new InternalApplicationErrorException();
+            $return['statusMessage'] = $ex->getMessage();
+            Yii::$app->response->statusCode = $ex->statusCode;
+            Yii::error($e);
         }
         return $return;
     }
