@@ -5,6 +5,7 @@ namespace DmitriiKoziuk\FakeRestApiModules\Blog\controllers\backend;
 use Yii;
 use yii\rest\ActiveController;
 use yii\filters\auth\HttpBearerAuth;
+use DmitriiKoziuk\FakeRestApiModules\Base\exceptions\InternalApplicationErrorException;
 use DmitriiKoziuk\FakeRestApiModules\Blog\controllers\actions\PostIndexAction;
 use DmitriiKoziuk\FakeRestApiModules\Blog\entities\PostEntity;
 use DmitriiKoziuk\FakeRestApiModules\Blog\controllers\actions\PostViewAction;
@@ -75,7 +76,10 @@ class PostController extends ActiveController
         } catch (PostNotFoundException $e) {
             $return['statusMessage'] = $e->getMessage();
         } catch (\Throwable $e) {
-            $return['statusMessage'] = 'Internal application error.';
+            $ex = new InternalApplicationErrorException();
+            $return['statusMessage'] = $ex->getMessage();
+            Yii::$app->response->statusCode = $ex->statusCode;
+            Yii::error($e);
         }
         return $return;
     }

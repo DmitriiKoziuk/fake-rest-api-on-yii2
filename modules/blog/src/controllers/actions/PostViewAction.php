@@ -2,7 +2,9 @@
 
 namespace DmitriiKoziuk\FakeRestApiModules\Blog\controllers\actions;
 
+use Yii;
 use yii\base\Action;
+use DmitriiKoziuk\FakeRestApiModules\Base\exceptions\InternalApplicationErrorException;
 use DmitriiKoziuk\FakeRestApiModules\Blog\repositories\PostRepository;
 use DmitriiKoziuk\FakeRestApiModules\Blog\exceptions\PostNotFoundException;
 
@@ -38,7 +40,10 @@ class PostViewAction extends Action
         } catch (PostNotFoundException $e) {
             $return['statusMessage'] = $e->getMessage();
         } catch (\Throwable $e) {
-            $return['statusMessage'] = 'Internal application error.';
+            $ex = new InternalApplicationErrorException();
+            $return['statusMessage'] = $ex->getMessage();
+            Yii::$app->response->statusCode = $ex->statusCode;
+            Yii::error($e);
         }
         return $return;
     }
